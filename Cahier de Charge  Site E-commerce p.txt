@@ -1,0 +1,60 @@
+**Cahier de Charge : Site E-commerce pour la Vente de Poteries**
+
+---
+
+### 1. Introduction
+
+Le projet vise à créer un site e-commerce spécialisé dans la vente de poteries artisanales. Ce site a pour objectif de mettre en avant les produits uniques des artisans locaux, tout en offrant une expérience utilisateur fluide et agréable. Il permettra aux clients de découvrir une large gamme de produits, de rechercher et de filtrer selon leurs préférences, et d’effectuer leurs achats en toute sécurité. En parallèle, un tableau de bord administrateur sera disponible pour gérer efficacement les produits, les commandes et les utilisateurs.
+
+---
+
+### 2. Fonctionnalités Principales
+
+#### 2.1. Fonctionnalités pour les Utilisateurs
+- **Inscription et Connexion** :
+  - Les utilisateurs pourront créer un compte ou se connecter avec des identifiants existants.
+  - Gestion des mots de passe oubliés.
+- **Recherche et Filtrage** :
+  - Une barre de recherche pour trouver des produits par nom ou par mot-clé.
+  - Des filtres pour affiner les résultats par catégorie, prix, ou disponibilité.
+- **Page des Produits** :
+  - Affichage des détails des produits : photos, description, prix, disponibilité.
+  - Ajout au panier et achat en ligne.
+
+#### 2.2. Fonctionnalités pour l’Administrateur
+- **Dashboard Administrateur** :
+  - Gestion des utilisateurs : ajout, suppression, modification.
+  - Gestion des produits :
+    - Ajouter, modifier ou supprimer des articles.
+    - Suivre les stocks disponibles.
+  - Gestion des commandes : consultation et suivi des commandes des clients.
+
+---
+
+### 3. Technologies Utilisées
+- **Backend** : PHP avec le framework Laravel pour une architecture robuste et sécurisée.
+- **Base de Données** : MySQL pour la gestion des données.
+- **Frontend** : HTML, CSS, et JavaScript (ou frameworks supplémentaires si besoin).
+
+---
+
+### 4. Conception UI/UX
+- Le maquettage du site sera réalisé avec **Figma** pour garantir un design ergonomique et attractif.
+- Les pages à concevoir incluent :
+  - Page d’accueil.
+  - Page de connexion/inscription.
+  - Page de listing des produits avec filtres.
+  - Page détaillée d’un produit.
+  - Dashboard administrateur.
+
+---
+
+### 5. Planning Prévisionnel
+Un calendrier détaillé sera établi après validation des exigences, avec une estimation du temps pour chaque étape :
+- Conception et validation des maquettes (UI/UX).
+- Développement backend.
+- Intégration frontend.
+- Tests et mise en production.
+
+---
+
