@@ -1,5 +1,6 @@
 @extends('layouts.admin.master')
 
+@section('title', 'Seller Dashboard')
 
 @section('content')
 
