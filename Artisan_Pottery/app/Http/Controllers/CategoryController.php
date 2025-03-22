@@ -32,52 +32,30 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-
-        // Validate the request
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'featured' => 'nullable|boolean'
-        ], [
-            'name.required' => 'The category name field is required.',
-            'name.unique' => 'This category name is already taken.',
-            'name.max' => 'The category name must not exceed 255 characters.',
-            'image.image' => 'The file must be an image.',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'image.max' => 'The image must not be larger than 2MB.'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        try {
-            // Handle image upload
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imagePath = $image->store('categories', 'public');
-            }
-
-            // Create category
-            Category::create([
-                'name' => $validated['name'],
-                'description' => $validated['description'] ?? null,
-                'image_path' => $imagePath,
-                'created_by' => Auth::id() ?? 1,
-                'updated_by' => auth::id() ?? 1, // Add this line
-            ]);
-
-            return redirect()
-                ->route('categories.index')
-                ->with('success', 'Category created successfully.');
-        } catch (\Exception $e) {
-            if (isset($imagePath)) {
-                Storage::disk('public')->delete($imagePath);
-            }
-
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Failed to create category. Please try again.');
+    
+        // Handle the image upload if an image is provided
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('category_images', 'public');
+            $validatedData['image_path'] = $imagePath; // Changed from 'image' to 'image_path'
+            unset($validatedData['image']); // Remove the original image field
         }
+    
+        // Add the created_by field with the authenticated user's ID
+        $validatedData['created_by'] = Auth::id() ?? 1;
+    
+        // Create a new category using the validated data
+        Category::create($validatedData);
+    
+        // Redirect to the categories index page with a success message
+        return redirect()->route('categories.index')->with('success', 'Category added successfully!');
     }
+
     /**
      * Display the specified category
      */
