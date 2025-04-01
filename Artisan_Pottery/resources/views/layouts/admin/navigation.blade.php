@@ -35,7 +35,14 @@
                 </a>
             </li>
             <li>
-                <a href="manage-product.html"
+                <a href="{{ route('categories.index') }}"
+                    class="flex items-center space-x-3 text-gray-600 hover:bg-amber-50 rounded-lg px-4 py-3">
+                    <i class="fas fa-tags"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('products.index') }}"
                     class="flex items-center space-x-3 text-gray-600 hover:bg-amber-50 rounded-lg px-4 py-3">
                     <i class="fas fa-box"></i>
                     <span>Products</span>
@@ -46,13 +53,6 @@
                     class="flex items-center space-x-3 text-gray-600 hover:bg-amber-50 rounded-lg px-4 py-3">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
-                </a>
-            </li>
-            <li>
-                <a href="manage-categories.html"
-                    class="flex items-center space-x-3 text-gray-600 hover:bg-amber-50 rounded-lg px-4 py-3">
-                    <i class="fas fa-tags"></i>
-                    <span>Categories</span>
                 </a>
             </li>
             <li>

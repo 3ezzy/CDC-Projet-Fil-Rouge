@@ -3,18 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('products.index', compact('products'));
+        $query = Product::query();
+
+        if ($request->has('search') && $request->get('search') != '') {
+            $query->where('name', 'like', '%'.$request->get('search').'%');
+        }
+
+        if ($request->has('category') && $request->get('category') != '') {
+            $query->where('category_id', $request->get('category'));
+        }
+
+        if ($request->has('stock_status')) {
+            if ($request->get('stock_status') == 'in-stock') {
+                $query->where('stock', '>', 10);
+            } elseif ($request->get('stock_status') == 'low-stock') {
+                $query->where('stock', '>', 0)->where('stock', '<=', 10);
+            } elseif ($request->get('stock_status') == 'out-of-stock') {
+                $query->where('stock', '=', 0);
+            }
+        }
+
+        $products = $query->paginate(5);
+        $categories = Category::all();
+
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**
@@ -22,7 +46,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $categories = Category::all();
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -32,9 +57,12 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'stock' => 'required|integer',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount' => 'nullable|numeric|min:0|max:100'
         ]);
 
         if ($request->hasFile('image')) {
@@ -42,6 +70,7 @@ class ProductController extends Controller
             $imagePath = $image->store('products', 'public');
             $validated['image_path'] = $imagePath;
         }
+        $validated['user_id'] = Auth::id() ?? 1;
 
         Product::create($validated);
 
@@ -61,7 +90,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        $categories = Category::all();
+        return view('products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -71,9 +101,12 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'stock' => 'required|integer',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount' => 'nullable|numeric|min:0|max:100'
         ]);
 
         if ($request->hasFile('image')) {
@@ -100,7 +133,7 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image_path);
         }
 
-        $product->delete();
+        $product->delete(); // This will now perform a soft delete
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
