@@ -98,40 +98,7 @@
                         <!-- Image previews will be inserted here -->
                     </div>
                 </div>
-
-                <!-- Additional Details -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Dimensions -->
-                    <div>
-                        <label for="dimensions" class="block text-sm font-medium text-gray-700 mb-1">Dimensions</label>
-                        <input type="text" id="dimensions" name="dimensions"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                            placeholder="e.g., 10" x 5" x 5"">
-                    </div>
-
-                    <!-- Weight -->
-                    <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
-                        <input type="text" id="weight" name="weight"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                            placeholder="e.g., 2.5 lbs">
-                    </div>
-                </div>
-
-                <!-- Additional Options -->
-                <div class="space-y-4">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="featured" name="featured"
-                            class="h-4 w-4 rounded text-amber-600 focus:ring-amber-500">
-                        <label for="featured" class="ml-2 text-gray-700">Mark as featured product</label>
-                    </div>
-                    <div class="flex items-center">
-                        <input type="checkbox" id="sale" name="sale"
-                            class="h-4 w-4 rounded text-amber-600 focus:ring-amber-500">
-                        <label for="sale" class="ml-2 text-gray-700">Put on sale</label>
-                    </div>
-                </div>
-
+                
                 <!-- Submit Buttons -->
                 <div class="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4">
                     <button type="button"
