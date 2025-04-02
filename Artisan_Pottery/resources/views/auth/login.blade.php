@@ -80,7 +80,7 @@
                         <div class="text-center mt-6">
                             <p class="text-gray-600 text-sm">
                                 Don't have an account?
-                                <a href="register.html" class="text-amber-600 hover:underline">Create account</a>
+                                <a href="{{ route('register') }}" class="text-amber-600 hover:underline">Create account</a>
                             </p>
                         </div>
                     </div>
