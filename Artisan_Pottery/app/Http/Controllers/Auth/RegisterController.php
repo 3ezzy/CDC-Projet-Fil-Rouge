@@ -23,26 +23,26 @@ class RegisterController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
             'phone' => 'nullable|string|max:15',
             'terms' => 'accepted',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        // Combine first name and last name into one name field
-        $fullName = $request->first_name . ' ' . $request->last_name;
-
-        User::create([
-            'name' => $fullName,
+    
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
+            'terms' => $request->terms
         ]);
-
-        Auth::attempt($request->only('email', 'password'));
-
+    
+        Auth::login($user);
+    
         return redirect()->route('dashboard')->with('success', 'Registration successful. You are now logged in.');
     }
 }
