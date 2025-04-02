@@ -19,21 +19,30 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'phone' => 'nullable|string|max:15',
+            'terms' => 'accepted',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Combine first name and last name into one name field
+        $fullName = $request->first_name . ' ' . $request->last_name;
+
         User::create([
-            'name' => $request->name,
+            'name' => $fullName,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
         ]);
 
-        return redirect()->route('login')->with('success', 'Registration successful. Please login.');
+        Auth::attempt($request->only('email', 'password'));
+
+        return redirect()->route('dashboard')->with('success', 'Registration successful. You are now logged in.');
     }
 }
