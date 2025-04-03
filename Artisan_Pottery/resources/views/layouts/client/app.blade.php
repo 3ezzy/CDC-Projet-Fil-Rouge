@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Modern Ceramic Art') | Artisan Pottery</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -61,30 +62,7 @@
     <!-- Footer Section -->
     @include('layouts.client.footer')
 
-    <!-- JavaScript for Mobile Menu -->
-    <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMobileMenu = document.getElementById('close-mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenuOverlay.classList.remove('hidden');
-            mobileMenu.classList.remove('-translate-x-full');
-        });
-
-        closeMobileMenu.addEventListener('click', () => {
-            mobileMenuOverlay.classList.add('hidden');
-            mobileMenu.classList.add('-translate-x-full');
-        });
-
-        mobileMenuOverlay.addEventListener('click', (e) => {
-            if (e.target === mobileMenuOverlay) {
-                mobileMenuOverlay.classList.add('hidden');
-                mobileMenu.classList.add('-translate-x-full');
-            }
-        });
-    </script>
+   
 
     <!-- ScrollReveal Initialization -->
     <script>

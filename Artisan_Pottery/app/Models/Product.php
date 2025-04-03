@@ -2,23 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'user_id',
-        'name',
         'category_id',
+        'name',
         'price',
         'stock',
         'description',
@@ -28,19 +23,36 @@ class Product extends Model
         'discount'
     ];
 
-     /**
-     * Get the user that owns the product.
-     */
-    public function user()
+    protected $appends = [
+        'total_price',
+        'formatted_price',
+        'formatted_total_price',
+        'formatted_discount_amount'
+    ];
+
+    public function getTotalPriceAttribute()
     {
-        return $this->belongsTo(User::class);
+        if ($this->discount) {
+            return round($this->price - ($this->price * $this->discount / 100), 2);
+        }
+        return $this->price;
     }
 
-    /**
-     * Get the category that the product belongs to.
-     */
-    public function category()
+    public function getFormattedPriceAttribute()
     {
-        return $this->belongsTo(Category::class);
+        return '$' . number_format($this->price, 2);
+    }
+
+    public function getFormattedTotalPriceAttribute()
+    {
+        return '$' . number_format($this->total_price, 2);
+    }
+
+    public function getFormattedDiscountAmountAttribute()
+    {
+        if ($this->discount) {
+            return '$' . number_format($this->price - $this->total_price, 2);
+        }
+        return '$0.00';
     }
 }

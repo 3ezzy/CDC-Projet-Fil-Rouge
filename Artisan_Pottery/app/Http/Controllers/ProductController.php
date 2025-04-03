@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Brand;
 
 class ProductController extends Controller
 {
@@ -40,6 +41,68 @@ class ProductController extends Controller
 
         return view('products.index', compact('products', 'categories'));
     }
+
+    public function indexStore(Request $request)
+    {
+        $query = Product::query();
+
+        // Apply category filter
+        if ($request->category) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Apply price filter
+        if ($request->min_price) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->max_price) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Apply stock filter
+        if ($request->in_stock) {
+            $query->where('stock', '>', 0);
+        }
+
+        // Apply review filter
+        if ($request->min_review) {
+            $query->where('review', '>=', $request->min_review);
+        }
+
+        // Apply discount filter
+        if ($request->has_discount) {
+            $query->whereNotNull('discount');
+        }
+
+        // Apply sorting
+        switch ($request->sort) {
+            case 'price_low_high':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high_low':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->latest();
+                break;
+            case 'best_rated':
+                $query->orderBy('review', 'desc');
+                break;
+            case 'best_selling':
+                $query->orderBy('stock', 'asc');
+                break;
+            default:
+                $query->latest();
+                break;
+        }
+
+        $products = $query->paginate(12);
+        $categories = Category::all();
+
+        return view('store.shop', compact('products', 'categories'));
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
