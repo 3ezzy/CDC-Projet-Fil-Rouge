@@ -95,6 +95,37 @@ class CartController extends Controller
         ], 404);
     }
 
+    public function remove($id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+
+            session()->put('cart', $cart);
+
+            // Calculate cart 
+            $cartTotal = 0;
+            $itemsCount = 0;
+            foreach ($cart as $item) {
+                $cartTotal += $item['total'];
+                $itemsCount += $item['quantity'];
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item removed from cart successfully!',
+                'cart_total' => number_format($cartTotal, 2),
+                'cart_items_count' => $itemsCount
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Item not found in cart.'
+        ], 404);
+    }
+
     public function show()
     {
         $cart = session()->get('cart', []);
