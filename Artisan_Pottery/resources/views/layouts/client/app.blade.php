@@ -73,6 +73,8 @@
             interval: 200
         });
     </script>
+
+@stack('scripts')
 </body>
 
 </html>

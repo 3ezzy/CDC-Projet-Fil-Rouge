@@ -47,7 +47,7 @@ class CartController extends Controller
         
         session()->put('cart', $cart);
         
-        // Calculate cart totals
+        // Calculate cart
         $cartTotal = 0;
         $itemsCount = 0;
         foreach ($cart as $item) {
@@ -61,6 +61,38 @@ class CartController extends Controller
             'cart_total' => number_format($cartTotal, 2),
             'cart_items_count' => $itemsCount
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity'] = $request->quantity;
+            $cart[$id]['total'] = $cart[$id]['quantity'] * $cart[$id]['total_price'];
+
+            session()->put('cart', $cart);
+
+            // Calculate cart 
+            $cartTotal = 0;
+            $itemsCount = 0;
+            foreach ($cart as $item) {
+                $cartTotal += $item['total'];
+                $itemsCount += $item['quantity'];
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cart updated successfully!',
+                'cart_total' => number_format($cartTotal, 2),
+                'cart_items_count' => $itemsCount
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Item not found in cart.'
+        ], 404);
     }
 
     public function show()
@@ -80,4 +112,6 @@ class CartController extends Controller
         }
         return number_format($total, 2);
     }
+
+    
 }
