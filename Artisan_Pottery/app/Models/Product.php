@@ -23,6 +23,15 @@ class Product extends Model
         'discount'
     ];
 
+
+    
+
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     protected $appends = [
         'total_price',
         'formatted_price',

@@ -121,7 +121,7 @@
                                     <div class="space-y-4">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Subtotal</span>
-                                            <span class="font-medium text-gray-800">${{ number_format($total, 2) }}</span>
+                                            <span class="font-medium text-gray-800">${{ number_format((float)$total, 2) }}</span>
                                         </div>
                                         <div class="flex justify-between text-sm">
                                             <span class="text-gray-600">Shipping</span>
@@ -131,7 +131,7 @@
                                             <div class="flex justify-between">
                                                 <span class="text-lg font-semibold text-gray-900">Total</span>
                                                 <span
-                                                    class="text-lg font-semibold text-gray-900">${{ number_format($total, 2) }}</span>
+                                                    class="text-lg font-semibold text-gray-900">${{ number_format((float)$total, 2) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -170,72 +170,70 @@
             </div>
         </div>
     </section>
-
-    @push('scripts')
-        <script>
-            function updateQuantity(productId, action) {
-    fetch(`/cart/update/${productId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            action: action
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            showNotification(data.message, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Failed to update quantity', 'error');
-    });
-}
-
-            function removeItem(productId) {
-                if (confirm('Are you sure you want to remove this item?')) {
-                    fetch(`/cart/remove/${productId}`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.reload();
-                            } else {
-                                showNotification(data.message, 'error');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            showNotification('Failed to remove item', 'error');
-                        });
-                }
-            }
-
-            function showNotification(message, type = 'success') {
-                const notification = document.createElement('div');
-                notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white z-50`;
-                notification.textContent = message;
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
-            }
-        </script>
-    @endpush
 @endsection
+
+@push('scripts')
+<script>
+    function updateQuantity(productId, action) {
+        fetch(`/cart/update/${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                action: action
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Failed to update quantity', 'error');
+        });
+    }
+
+    function removeItem(productId) {
+        if (confirm('Are you sure you want to remove this item?')) {
+            fetch(`/cart/remove/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Failed to remove item', 'error');
+            });
+        }
+    }
+
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white z-50`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+@endpush

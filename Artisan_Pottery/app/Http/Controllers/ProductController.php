@@ -133,7 +133,9 @@ class ProductController extends Controller
             $imagePath = $image->store('products', 'public');
             $validated['image_path'] = $imagePath;
         }
-        $validated['user_id'] = Auth::id() ?? 1;
+
+
+        $validated['user_id'] = Auth::id();
 
         Product::create($validated);
 
