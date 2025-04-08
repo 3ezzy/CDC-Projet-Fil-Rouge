@@ -7,54 +7,54 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-        public function add(Product $product)
-        {
-            // Check if product exists and is in stock
-                if ($product->stock <= 0) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sorry, this product is out of stock.'
+    public function add(Product $product)
+    {
+        // Check if product exists and is in stock
+        if ($product->stock <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, this product is out of stock.'
+            ], 400);
+        }
+    
+        $cart = session()->get('cart', []);
+    
+        // Use the dynamically calculated total price
+        $price = $product->total_price;
+    
+        if (isset($cart[$product->id])) {
+            // Check if adding more would exceed stock
+            if ($cart[$product->id]['quantity'] >= $product->stock) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, we don\'t have enough stock.'
                 ], 400);
             }
-
-            $cart = session()->get('cart', []);
-            
-            // Calculate the discounted price
-            $price = $product->total_price;
-
-            if (isset($cart[$product->id])) {
-                // Check if adding more would exceed stock
-                if ($cart[$product->id]['quantity'] >= $product->stock) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sorry, we don\'t have enough stock.'
-                    ], 400);
-                }
-                
-                $cart[$product->id]['quantity']++;
-                $cart[$product->id]['total'] = $cart[$product->id]['quantity'] * $price;
-            } else {
-                $cart[$product->id] = [
-                    'name' => $product->name,
-                    'quantity' => 1,
-                    'price' => $product->price,
-                    'discount' => $product->discount,
-                    'total_price' => $price,
-                    'total' => $price,
-                    'image_path' => $product->image_path
-                ];
-            }
-        
+    
+            $cart[$product->id]['quantity']++;
+            $cart[$product->id]['total'] = $cart[$product->id]['quantity'] * $price;
+        } else {
+            $cart[$product->id] = [
+                'name' => $product->name,
+                'quantity' => 1,
+                'price' => $price, // discounted price here
+                'discount' => $product->discount,
+                'total_price' => $price, //  discounted price here
+                'total' => $price, // discounted price here
+                'image_path' => $product->image_path
+            ];
+        }
+    
         session()->put('cart', $cart);
-        
-        // Calculate cart
+    
+        // Calculate cart totals
         $cartTotal = 0;
         $itemsCount = 0;
         foreach ($cart as $item) {
             $cartTotal += $item['total'];
             $itemsCount += $item['quantity'];
         }
-
+    
         return response()->json([
             'success' => true,
             'message' => 'Product added to cart successfully!',
