@@ -186,19 +186,19 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <div class="flex flex-col">
-                                    @if ($product->discount)
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="text-gray-500 line-through text-sm">{{ $product->formatted_price }}</span>
-                                            <span
-                                                class="text-amber-600 font-semibold">{{ $product->formatted_total_price }}</span>
+                                    <div class="flex flex-col">
+                                        @if ($product->discount > 0)
+                                            <div>
+                                                <span class="text-gray-500 line-through text-sm">{{ $product->formatted_price }}</span>
+                                                <span class="text-amber-600 font-semibold">{{ $product->formatted_total_price }}</span>
+                                            </div>
                                             <span class="text-green-500 text-xs">
                                                 Save {{ $product->formatted_discount_amount }}
                                             </span>
-                                        </div>
-                                    @else
-                                        <span class="text-amber-600 font-semibold">{{ $product->formatted_price }}</span>
-                                    @endif
+                                        @else
+                                            <span class="text-amber-600 font-semibold">{{ $product->formatted_price }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <!-- Add to Cart Button -->
                                 @if ($product->stock > 0)
