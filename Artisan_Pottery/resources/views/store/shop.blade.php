@@ -166,7 +166,7 @@
                                 </div>
                             @endif
 
-                            @if ($product->discount)
+                            @if ($product->discount > 0)
                                 <div class="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
                                     -{{ $product->discount }}%
                                 </div>
@@ -225,71 +225,71 @@
             </div>
         </div>
     </section>
-    
-        <script>
-            // Toggle filter panel
-            document.getElementById('filter-button').addEventListener('click', function() {
-                document.getElementById('filter-panel').classList.toggle('hidden');
-            });
 
-            // Add to cart function
-            function addToCart(productId) {
-                fetch(`/cart/add/${productId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        credentials: 'same-origin'
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(json => Promise.reject(json));
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Show success notification
-                        showNotification(data.message, 'success');
+    <script>
+        // Toggle filter panel
+        document.getElementById('filter-button').addEventListener('click', function() {
+            document.getElementById('filter-panel').classList.toggle('hidden');
+        });
 
-                        // Update cart counter
-                        const cartCounter = document.getElementById('cart-counter');
-                        if (cartCounter) {
-                            cartCounter.textContent = data.cart_items_count;
-                            cartCounter.classList.remove('hidden');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        showNotification(error.message || 'Failed to add product to cart', 'error');
-                    });
-            }
+        // Add to cart function
+        function addToCart(productId) {
+            fetch(`/cart/add/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(json => Promise.reject(json));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Show success notification
+                    showNotification(data.message, 'success');
 
-            // Helper function to show notifications
-            function showNotification(message, type = 'success') {
-                const notification = document.createElement('div');
-                notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
+                    // Update cart counter
+                    const cartCounter = document.getElementById('cart-counter');
+                    if (cartCounter) {
+                        cartCounter.textContent = data.cart_items_count;
+                        cartCounter.classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification(error.message || 'Failed to add product to cart', 'error');
+                });
+        }
+
+        // Helper function to show notifications
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
             type === 'success' ? 'bg-green-500' : 'bg-red-500'
         } text-white z-50`;
-                notification.textContent = message;
-                document.body.appendChild(notification);
+            notification.textContent = message;
+            document.body.appendChild(notification);
 
-                // Add fade-in effect
+            // Add fade-in effect
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s ease-in-out';
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+
+            // Remove notification after 3 seconds with fade-out effect
+            setTimeout(() => {
                 notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s ease-in-out';
                 setTimeout(() => {
-                    notification.style.opacity = '1';
-                }, 10);
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
 
-                // Remove notification after 3 seconds with fade-out effect
-                setTimeout(() => {
-                    notification.style.opacity = '0';
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 300);
-                }, 3000);
-            }
-        </script>
-        
 @endsection
