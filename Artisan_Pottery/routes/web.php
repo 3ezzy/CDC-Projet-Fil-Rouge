@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\StoreController;
 
 
 Route::get('/', function () {
@@ -40,6 +41,8 @@ Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+Route::get('/', [StoreController::class, 'index'])->name('home');
 
 Route::post('/logout', 'AuthController@logout');
 

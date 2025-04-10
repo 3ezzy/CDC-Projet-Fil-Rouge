@@ -57,67 +57,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="font-playfair text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Categories</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Explore our carefully curated collection of handcrafted
-                    pottery, designed with both beauty and functionality in mind.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto">Explore our carefully curated collection of handcrafted pottery.</p>
             </div>
-
+    
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Category 1 -->
-                <div class="group">
-                    <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                        <img src="https://images.unsplash.com/photo-1597696929736-6d13bed8e6a8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Vases" class="w-full h-80 object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                            <div class="p-6">
-                                <h3 class="font-playfair text-xl font-bold text-white mb-2">Vases</h3>
-                                <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Beautiful vessels for your flowers and decorative accents.</p>
-                                <a href="product.html?category=vases" class="inline-flex items-center text-white">
-                                    <span class="mr-2">Explore Collection</span>
-                                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                                </a>
+                @foreach($categories as $category)
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
+                            <img src="{{ $category->category_image }}" alt="{{ $category->name }}" class="w-full h-80 object-cover" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                                <div class="p-6">
+                                    <h3 class="font-playfair text-xl font-bold text-white mb-2">{{ $category->name }}</h3>
+                                    <p class="text-white/80 text-sm mb-4">{{ $category->description }}</p>
+                                    <a href="#" class="inline-flex items-center text-white">
+                                        <span class="mr-2">Explore Collection</span>
+                                        <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Category 2 -->
-                <div class="group">
-                    <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                        <img src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2VyYW1pYyUyMGRpbm5lcndhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                            alt="Dinnerware" class="w-full h-80 object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                            <div class="p-6">
-                                <h3 class="font-playfair text-xl font-bold text-white mb-2">Dinnerware</h3>
-                                <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Elegant plates, bowls, and serving pieces for your table.</p>
-                                <a href="product.html?category=dinnerware" class="inline-flex items-center text-white">
-                                    <span class="mr-2">Explore Collection</span>
-                                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 3 -->
-                <div class="group">
-                    <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                        <img src="https://plus.unsplash.com/premium_photo-1666974578443-8dd11ef53c38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Drinkware" class="w-full h-80 object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                            <div class="p-6">
-                                <h3 class="font-playfair text-xl font-bold text-white mb-2">Drinkware</h3>
-                                <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Handcrafted mugs, cups, and glasses for your favorite beverages.</p>
-                                <a href="product.html?category=drinkware" class="inline-flex items-center text-white">
-                                    <span class="mr-2">Explore Collection</span>
-                                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
