@@ -57,23 +57,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="font-playfair text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Categories</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Explore our carefully curated collection of handcrafted pottery.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto">Explore our carefully curated collection of handcrafted pottery.
+                </p>
             </div>
-    
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($categories as $category)
+                @foreach ($categories as $category)
                     <div class="group">
                         <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                            <img src="{{ $category->category_image }}" alt="{{ $category->name }}" class="w-full h-80 object-cover" />
+                            <img src="{{ Storage::url($category->image_path) }}" alt="{{ $category->name }}"
+                                class="w-full h-80 object-cover" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-6">
                                     <h3 class="font-playfair text-xl font-bold text-white mb-2">{{ $category->name }}</h3>
                                     <p class="text-white/80 text-sm mb-4">{{ $category->description }}</p>
-                                    <a href="#" class="inline-flex items-center text-white">
+                                    <a href="{{ route('shop') }}" class="inline-flex items-center text-white">
                                         <span class="mr-2">Explore Collection</span>
                                         <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                                     </a>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
