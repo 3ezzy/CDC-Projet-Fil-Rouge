@@ -70,7 +70,7 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-6">
                                     <h3 class="font-playfair text-xl font-bold text-white mb-2">{{ $category->name }}</h3>
-                                    <p class="text-white/80 text-sm mb-4">{{ $category->description }}</p>
+                                    <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">{{ $category->description }}</p>
                                     <a href="{{ route('shop') }}" class="inline-flex items-center text-white">
                                         <span class="mr-2">Explore Collection</span>
                                         <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
