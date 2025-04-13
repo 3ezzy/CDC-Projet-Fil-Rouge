@@ -278,7 +278,7 @@
                         but also
                         environmentally responsible.
                     </p>
-                    <a href="about.html" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                    <a href="{{ route('about') }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                         <span>Learn More About Our Process</span>
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
