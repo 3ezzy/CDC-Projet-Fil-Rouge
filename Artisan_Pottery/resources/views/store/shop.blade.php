@@ -156,59 +156,77 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach ($products as $product)
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale">
-                        <div class="relative">
-                            @if ($product->image_path)
-                                <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
-                                    class="w-full h-64 object-cover">
-                            @else
-                                <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-image text-gray-400 text-4xl"></i>
-                                </div>
-                            @endif
+                        <!-- Product Image Section - Wrapped in a link -->
+                        <a href="{{ route('store.products.show', $product) }}" class="block relative">
+                            <div class="relative">
+                                @if ($product->image_path)
+                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
+                                        class="w-full h-64 object-cover">
+                                @else
+                                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-400 text-4xl"></i>
+                                    </div>
+                                @endif
 
-                            @if ($product->discount > 0)
-                                <div class="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
-                                    -{{ $product->discount }}%
-                                </div>
-                            @endif
+                                @if ($product->discount > 0)
+                                    <div
+                                        class="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
+                                        -{{ $product->discount }}%
+                                    </div>
+                                @endif
 
-                            <button class="absolute top-4 right-4 bg-white/80 p-2 rounded-full">
-                                <i class="fas fa-heart text-gray-600"></i>
-                            </button>
-                        </div>
+                                <button type="button" class="absolute top-4 right-4 bg-white/80 p-2 rounded-full"
+                                    onclick="event.preventDefault(); toggleWishlist({{ $product->id }})">
+                                    <i class="fas fa-heart text-gray-600"></i>
+                                </button>
+                            </div>
+                        </a>
+
                         <div class="p-4">
-                            <h3 class="font-medium text-gray-800 mb-2">{{ $product->name }}</h3>
+                            <!-- Product Name - Wrapped in a link -->
+                            <a href="{{ route('store.products.show', $product) }}"
+                                class="block font-medium text-gray-800 mb-2 hover:text-amber-600 transition-colors">
+                                {{ $product->name }}
+                            </a>
+
+                            <!-- Rating Stars -->
                             <div class="flex items-center mb-2">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <i
                                         class="fas fa-star {{ $i <= ($product->review ?? 3) ? 'text-amber-400' : 'text-gray-300' }}"></i>
                                 @endfor
                             </div>
+
+                            <!-- Price and Cart Section -->
                             <div class="flex justify-between items-center">
                                 <div class="flex flex-col">
                                     <div class="flex flex-col">
                                         @if ($product->discount > 0)
                                             <div>
-                                                <span class="text-gray-500 line-through text-sm">{{ $product->formatted_price }}</span>
-                                                <span class="text-amber-600 font-semibold">{{ $product->formatted_total_price }}</span>
+                                                <span
+                                                    class="text-gray-500 line-through text-sm">{{ $product->formatted_price }}</span>
+                                                <span
+                                                    class="text-amber-600 font-semibold">{{ $product->formatted_total_price }}</span>
                                             </div>
                                             <span class="text-green-500 text-xs">
                                                 Save {{ $product->formatted_discount_amount }}
                                             </span>
                                         @else
-                                            <span class="text-amber-600 font-semibold">{{ $product->formatted_price }}</span>
+                                            <span
+                                                class="text-amber-600 font-semibold">{{ $product->formatted_price }}</span>
                                         @endif
                                     </div>
                                 </div>
+
                                 <!-- Add to Cart Button -->
                                 @if ($product->stock > 0)
-                                    <button
+                                    <button type="button"
                                         class="bg-amber-600 text-white px-3 py-1 rounded-full text-sm hover:bg-amber-700"
                                         onclick="addToCart({{ $product->id }})">
                                         Add to Cart
                                     </button>
                                 @else
-                                    <button
+                                    <button type="button"
                                         class="bg-gray-400 text-white px-3 py-1 rounded-full text-sm cursor-not-allowed">
                                         Out of Stock
                                     </button>
@@ -218,6 +236,39 @@
                     </div>
                 @endforeach
             </div>
+
+            @push('scripts')
+                <script>
+                    function addToCart(productId) {
+                        // Prevent navigation to product detail when clicking add to cart
+                        event.preventDefault();
+
+                        // Your existing addToCart logic here
+                        fetch(`/cart/add/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json',
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Handle success
+                                // You might want to show a notification or update cart count
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    }
+
+                    function toggleWishlist(productId) {
+                        // Prevent navigation to product detail when clicking wishlist
+                        event.preventDefault();
+
+                        // Your wishlist toggle logic here
+                    }
+                </script>
+            @endpush
 
             <!-- Pagination -->
             <div class="flex justify-center mt-12">

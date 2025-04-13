@@ -8,43 +8,39 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\StoreController;
 
-
-Route::get('/', function () {
-    return view('store.index');
-})->name('home');
-// Route::get('/shop', function () {
-//     return view('store.shop ');
-// });
-
-
-route::get('dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-route::get('about', function () {
+// Store Front-end Routes
+Route::get('/', [StoreController::class, 'index'])->name('home');
+Route::get('/about', function () {
     return view('store.about');
 })->name('about');
-
-route::get('contact', function () {
+Route::get('/contact', function () {
     return view('store.contact');
 })->name('contact');
 
+// Shop Routes
+Route::get('/shop', [ProductController::class, 'indexStore'])->name('shop');
+Route::get('/shop/{product}', [ProductController::class, 'show'])->name('store.products.show'); 
 
+// Cart Routes
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+// Authentication Routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-route::get('/shop', [ProductController::class, 'indexStore'])->name('shop');
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-Route::get('/', [StoreController::class, 'index'])->name('home');
-
-Route::post('/logout', 'AuthController@logout');
-
-Route::resource('categories', CategoryController::class);
-Route::resource('products', ProductController::class);
+// Admin Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
+    // Admin Resource Routes
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+});

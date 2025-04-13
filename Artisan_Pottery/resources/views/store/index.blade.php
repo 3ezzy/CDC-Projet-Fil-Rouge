@@ -95,7 +95,7 @@
                     <h2 class="font-playfair text-3xl md:text-4xl font-bold text-gray-800">Best Sellers</h2>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="product.html" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                    <a href="{{route('shop')}}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                         <span>View All Products</span>
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">

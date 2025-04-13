@@ -145,10 +145,18 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
-    {
+    public function show(Product $product, Request $request)
+{
+    // Check if the request is coming from the admin area or store front
+    if ($request->is('admin/*') || $request->is('products/*')) {
         return view('products.show', compact('product'));
     }
+
+    // For store front-end view
+    return view('store.product-detail', [
+        'product' => $product->load('category'),
+    ]);
+}
 
     /**
      * Show the form for editing the specified resource.
