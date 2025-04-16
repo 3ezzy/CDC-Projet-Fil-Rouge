@@ -21,7 +21,14 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('dashboard')->with('success', 'Login successful.');
+            $user = Auth::user();
+
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome, Admin!');
+            }
+
+            return redirect()->route('home')->with('success', 'Welcome back!');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
