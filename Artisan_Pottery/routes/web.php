@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\WishlistController;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
@@ -27,6 +28,12 @@ Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+// Wishlist Routes
+Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
+Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+Route::post('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 
 // Authentication Routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');

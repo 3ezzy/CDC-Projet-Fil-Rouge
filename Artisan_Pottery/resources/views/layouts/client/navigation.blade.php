@@ -15,7 +15,7 @@
                     <button class="p-2 hover:bg-gray-100 rounded-full transition-colors">
                         <i class="fas fa-search text-gray-600"></i>
                     </button>
-                    <a href="#" class="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                    <a href="{{ route('wishlist.show') }}" class="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                         <i class="fas fa-heart text-gray-600"></i>
                         @if(session()->has('wishlist') && count(session('wishlist')) > 0)
                             <span class="absolute -top-1 -right-1 bg-amber-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">

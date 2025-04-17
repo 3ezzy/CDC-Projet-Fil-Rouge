@@ -156,8 +156,9 @@
                         <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
                     </div>
                     <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
+                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
+                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
                         </button>
                     </div>
                 </div>
@@ -195,8 +196,9 @@
                         <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
                     </div>
                     <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
+                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
+                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
                         </button>
                     </div>
                 </div>
@@ -228,8 +230,9 @@
                     <img src="https://plus.unsplash.com/premium_photo-1666974555400-88f1b945a344?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Ceramic Bowl Set" class="w-full h-64 object-cover" />
                     <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
+                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
+                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
                         </button>
                     </div>
                 </div>
@@ -264,8 +267,9 @@
                         <span class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">Sale</span>
                     </div>
                     <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
+                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
+                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
                         </button>
                     </div>
                 </div>
@@ -419,3 +423,84 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    function toggleWishlist(productId, button) {
+        // Prevent event propagation
+        event.preventDefault();
+        event.stopPropagation();
+
+        fetch(`/wishlist/toggle/${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update heart icon
+            const heartIcon = button.querySelector('i');
+            if (data.in_wishlist) {
+                heartIcon.classList.remove('text-gray-400');
+                heartIcon.classList.add('text-red-500');
+            } else {
+                heartIcon.classList.remove('text-red-500');
+                heartIcon.classList.add('text-gray-400');
+            }
+
+            // Update wishlist counter in navigation
+            updateWishlistCounter(data.wishlist_count);
+
+            // Show notification
+            showNotification(data.message, 'success');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('An error occurred', 'error');
+        });
+    }
+    
+    function updateWishlistCounter(count) {
+        // Get the wishlist counter element in the navigation
+        const navWishlistCounters = document.querySelectorAll('.fa-heart + span');
+        
+        navWishlistCounters.forEach(counter => {
+            if (count > 0) {
+                counter.textContent = count;
+                counter.classList.remove('hidden');
+            } else {
+                counter.classList.add('hidden');
+            }
+        });
+    }
+    
+    function showNotification(message, type) {
+        // Create a simple notification
+        const notification = document.createElement('div');
+        notification.classList.add(
+            'fixed', 'top-4', 'right-4', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg',
+            'z-50', 'transition-opacity', 'duration-500'
+        );
+        
+        if (type === 'success') {
+            notification.classList.add('bg-green-100', 'text-green-800');
+        } else {
+            notification.classList.add('bg-red-100', 'text-red-800');
+        }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('opacity-0');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 500);
+        }, 3000);
+    }
+</script>
+@endpush

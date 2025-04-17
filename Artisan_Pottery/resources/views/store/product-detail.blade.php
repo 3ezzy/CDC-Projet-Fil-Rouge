@@ -134,9 +134,10 @@
 
                         <!-- Additional Options -->
                         <div class="flex items-center justify-between mt-6">
-                            <button class="flex items-center text-gray-600 hover:text-amber-600 transition-colors">
-                                <i class="far fa-heart mr-2"></i>
-                                Add to Wishlist
+                            <button id="wishlist-button" type="button" onclick="toggleWishlist({{ $product->id }})" 
+                                class="flex items-center text-gray-600 hover:text-amber-600 transition-colors">
+                                <i class="fa{{ in_array($product->id, array_keys(session('wishlist', []))) ? 's' : 'r' }} fa-heart mr-2 {{ in_array($product->id, array_keys(session('wishlist', []))) ? 'text-red-500' : '' }}"></i>
+                                <span>{{ in_array($product->id, array_keys(session('wishlist', []))) ? 'Remove from' : 'Add to' }} Wishlist</span>
                             </button>
                             <button class="flex items-center text-gray-600 hover:text-amber-600 transition-colors">
                                 <i class="fas fa-share-alt mr-2"></i>
@@ -268,13 +269,98 @@
     </section>
     @push('scripts')
         <script>
-            function updateQuantity(change) {
+            function updateQuantity(delta) {
                 const input = document.getElementById('quantity');
-                const currentValue = parseInt(input.value) || 1;
-                const newValue = Math.max(1, Math.min(currentValue + change, {{ $product->stock }}));
+                const currentValue = parseInt(input.value);
+                const maxValue = parseInt(input.max);
+                
+                let newValue = currentValue + delta;
+                if (newValue < 1) newValue = 1;
+                if (newValue > maxValue) newValue = maxValue;
+                
                 input.value = newValue;
             }
 
+            function toggleWishlist(productId) {
+                fetch(`/wishlist/toggle/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update wishlist button appearance
+                    const button = document.getElementById('wishlist-button');
+                    const icon = button.querySelector('i');
+                    const text = button.querySelector('span');
+                    
+                    if (data.in_wishlist) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas', 'text-red-500');
+                        text.textContent = 'Remove from Wishlist';
+                    } else {
+                        icon.classList.remove('fas', 'text-red-500');
+                        icon.classList.add('far');
+                        text.textContent = 'Add to Wishlist';
+                    }
+                    
+                    // Update wishlist counter in navigation
+                    updateWishlistCounter(data.wishlist_count);
+                    
+                    // Show notification
+                    showNotification(data.message, 'success');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred', 'error');
+                });
+            }
+            
+            function updateWishlistCounter(count) {
+                // Get the wishlist counter element in the navigation
+                const navWishlistCounters = document.querySelectorAll('.fa-heart + span');
+                
+                navWishlistCounters.forEach(counter => {
+                    if (count > 0) {
+                        counter.textContent = count;
+                        counter.classList.remove('hidden');
+                    } else {
+                        counter.classList.add('hidden');
+                    }
+                });
+            }
+            
+            function showNotification(message, type) {
+                // Check if there's an existing notification system
+                // If not, create a simple one
+                const notification = document.createElement('div');
+                notification.classList.add(
+                    'fixed', 'top-4', 'right-4', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg',
+                    'z-50', 'transition-opacity', 'duration-500'
+                );
+                
+                if (type === 'success') {
+                    notification.classList.add('bg-green-100', 'text-green-800');
+                } else {
+                    notification.classList.add('bg-red-100', 'text-red-800');
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.add('opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 500);
+                }, 3000);
+            }
+
+            // Review star rating functionality
             document.addEventListener('DOMContentLoaded', function() {
                 const stars = document.querySelectorAll('[id^="rating-"]');
                 const labels = document.querySelectorAll('[for^="rating-"]');
@@ -293,14 +379,14 @@
                         }
                     });
                 }
-
+                
                 // Handle click events
                 stars.forEach(star => {
                     star.addEventListener('change', function() {
                         updateStars(parseInt(this.value));
                     });
                 });
-
+                
                 // Handle hover effects
                 labels.forEach(label => {
                     label.addEventListener('mouseenter', function() {
