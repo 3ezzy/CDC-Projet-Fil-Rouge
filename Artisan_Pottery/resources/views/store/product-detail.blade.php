@@ -158,8 +158,8 @@
     </section>
 
 
-     <!-- Reviews Section -->
-     <section class="bg-gray-50 py-12">
+    <!-- Reviews Section -->
+    <section class="bg-gray-50 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Reviews</h2>
 
@@ -168,12 +168,58 @@
                 <form action="{{ route('reviews.store', $product->id) }}" method="POST" class="mb-6">
                     @csrf
                     <div class="mb-4">
-                        <label for="rating" class="block text-sm font-medium text-gray-700">Rating (1 to 5)</label>
-                        <select name="rating" id="rating" required class="block w-full border-gray-300 rounded-md shadow-sm">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                            @endfor
-                        </select>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <div class="flex flex-row-reverse items-center justify-end">
+                            <input type="radio" id="rating-5" name="rating" value="5" class="hidden peer">
+                            <label for="rating-5"
+                                class="cursor-pointer px-1 text-gray-300 peer-checked:text-amber-500 hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="rating-4" name="rating" value="4" class="hidden peer">
+                            <label for="rating-4"
+                                class="cursor-pointer px-1 text-gray-300 peer-checked:text-amber-500 hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="rating-3" name="rating" value="3" class="hidden peer">
+                            <label for="rating-3"
+                                class="cursor-pointer px-1 text-gray-300 peer-checked:text-amber-500 hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="rating-2" name="rating" value="2" class="hidden peer">
+                            <label for="rating-2"
+                                class="cursor-pointer px-1 text-gray-300 peer-checked:text-amber-500 hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="rating-1" name="rating" value="1" class="hidden peer">
+                            <label for="rating-1"
+                                class="cursor-pointer px-1 text-gray-300 peer-checked:text-amber-500 hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label for="comment" class="block text-sm font-medium text-gray-700">Comment</label>
@@ -182,7 +228,8 @@
                     <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded-lg">Submit Review</button>
                 </form>
             @else
-                <p class="text-sm text-gray-600">Please <a href="{{ route('login') }}" class="text-amber-600">login</a> to leave a review.</p>
+                <p class="text-sm text-gray-600">Please <a href="{{ route('login') }}" class="text-amber-600">login</a> to
+                    leave a review.</p>
             @endauth
 
             <!-- Display Reviews -->
@@ -190,8 +237,25 @@
                 @forelse ($product->reviews as $review)
                     <div class="p-4 bg-white shadow rounded-lg">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-medium text-gray-800">{{ $review->user->name }}</h3>
-                            <span class="text-sm text-amber-600">{{ $review->rating }} / 5</span>
+                            <h3 class="text-lg font-medium text-gray-800">{{ $review->user->first_name }}
+                                {{ $review->user->last_name }}</h3>
+                            <div class="flex">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $review->rating)
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                    @endif
+                                @endfor
+                            </div>
                         </div>
                         <p class="text-gray-600 mt-2">{{ $review->comment }}</p>
                         <small class="text-gray-400">{{ $review->created_at->format('F j, Y') }}</small>
@@ -210,6 +274,65 @@
                 const newValue = Math.max(1, Math.min(currentValue + change, {{ $product->stock }}));
                 input.value = newValue;
             }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const stars = document.querySelectorAll('[id^="rating-"]');
+                const labels = document.querySelectorAll('[for^="rating-"]');
+
+                // Function to update stars based on selection
+                function updateStars(selectedRating) {
+                    labels.forEach(label => {
+                        const ratingValue = parseInt(label.getAttribute('for').split('-')[1]);
+
+                        if (ratingValue <= selectedRating) {
+                            label.classList.remove('text-gray-300');
+                            label.classList.add('text-amber-500');
+                        } else {
+                            label.classList.remove('text-amber-500');
+                            label.classList.add('text-gray-300');
+                        }
+                    });
+                }
+
+                // Handle click events
+                stars.forEach(star => {
+                    star.addEventListener('change', function() {
+                        updateStars(parseInt(this.value));
+                    });
+                });
+
+                // Handle hover effects
+                labels.forEach(label => {
+                    label.addEventListener('mouseenter', function() {
+                        const ratingValue = parseInt(this.getAttribute('for').split('-')[1]);
+
+                        labels.forEach(lbl => {
+                            const lblValue = parseInt(lbl.getAttribute('for').split('-')[1]);
+
+                            if (lblValue <= ratingValue) {
+                                lbl.classList.remove('text-gray-300');
+                                lbl.classList.add('text-amber-500');
+                            } else {
+                                lbl.classList.remove('text-amber-500');
+                                lbl.classList.add('text-gray-300');
+                            }
+                        });
+                    });
+
+                    // When mouse leaves, revert to the actual selection
+                    label.addEventListener('mouseleave', function() {
+                        const selectedStar = document.querySelector('[name="rating"]:checked');
+                        if (selectedStar) {
+                            updateStars(parseInt(selectedStar.value));
+                        } else {
+                            labels.forEach(lbl => {
+                                lbl.classList.remove('text-amber-500');
+                                lbl.classList.add('text-gray-300');
+                            });
+                        }
+                    });
+                });
+            });
         </script>
     @endpush
 @endsection
