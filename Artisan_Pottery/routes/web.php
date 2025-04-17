@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ProductReviewController;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
@@ -44,3 +45,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
 });
+
+
+// Product Review Routes
+// Review routes
+Route::middleware('auth')->group(function () {
+});
+Route::get('products/{product}/reviews/create', [ProductReviewController::class, 'create'])->name('reviews.create');
+Route::post('products/{productId}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
+
+Route::get('products/{productId}/reviews', [ProductReviewController::class, 'index'])->name('reviews.index');    

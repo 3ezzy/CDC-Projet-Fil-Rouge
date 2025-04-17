@@ -38,6 +38,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
+            'terms' => $request->has('terms'),
         ]);
     
         Auth::login($user);

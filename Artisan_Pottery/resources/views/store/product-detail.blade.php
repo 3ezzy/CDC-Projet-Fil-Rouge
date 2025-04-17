@@ -18,7 +18,6 @@
             </nav>
         </div>
     </div>
-
     <!-- Product Detail Section -->
     <section class="bg-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,6 +157,51 @@
         </div>
     </section>
 
+
+     <!-- Reviews Section -->
+     <section class="bg-gray-50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Reviews</h2>
+
+            <!-- Review Form -->
+            @auth
+                <form action="{{ route('reviews.store', $product->id) }}" method="POST" class="mb-6">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="rating" class="block text-sm font-medium text-gray-700">Rating (1 to 5)</label>
+                        <select name="rating" id="rating" required class="block w-full border-gray-300 rounded-md shadow-sm">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="comment" class="block text-sm font-medium text-gray-700">Comment</label>
+                        <textarea name="comment" id="comment" rows="4" class="block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                    </div>
+                    <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded-lg">Submit Review</button>
+                </form>
+            @else
+                <p class="text-sm text-gray-600">Please <a href="{{ route('login') }}" class="text-amber-600">login</a> to leave a review.</p>
+            @endauth
+
+            <!-- Display Reviews -->
+            <div class="space-y-4">
+                @forelse ($product->reviews as $review)
+                    <div class="p-4 bg-white shadow rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-gray-800">{{ $review->user->name }}</h3>
+                            <span class="text-sm text-amber-600">{{ $review->rating }} / 5</span>
+                        </div>
+                        <p class="text-gray-600 mt-2">{{ $review->comment }}</p>
+                        <small class="text-gray-400">{{ $review->created_at->format('F j, Y') }}</small>
+                    </div>
+                @empty
+                    <p class="text-gray-500">No reviews yet. Be the first to leave one!</p>
+                @endforelse
+            </div>
+        </div>
+    </section>
     @push('scripts')
         <script>
             function updateQuantity(change) {
