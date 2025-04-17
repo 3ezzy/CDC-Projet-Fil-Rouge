@@ -32,6 +32,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
     protected $appends = [
         'total_price',
         'formatted_price',
