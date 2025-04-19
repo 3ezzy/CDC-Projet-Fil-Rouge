@@ -9,15 +9,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\ContactController;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
 Route::get('/about', function () {
     return view('store.about');
 })->name('about');
-Route::get('/contact', function () {
-    return view('store.contact');
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 // Shop Routes
 Route::get('/shop', [ProductController::class, 'indexStore'])->name('shop');

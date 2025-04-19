@@ -75,16 +75,41 @@
             <!-- Contact Form -->
             <div class="bg-white p-8 rounded-2xl shadow-lg">
                 <h2 class="font-playfair text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
-                <form action="#" method="POST" class="space-y-6">
+                
+                @if(session('success'))
+                    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('contact.send') }}" method="POST" class="space-y-6">
+                    @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
                             <input 
                                 type="text" 
                                 id="first_name" 
-                                name="first_name" 
+                                name="first_name"
+                                value="{{ old('first_name') }}"
                                 required 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('first_name') border-red-500 @enderror"
                             >
                         </div>
                         <div>
@@ -92,9 +117,10 @@
                             <input 
                                 type="text" 
                                 id="last_name" 
-                                name="last_name" 
+                                name="last_name"
+                                value="{{ old('last_name') }}"
                                 required 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('last_name') border-red-500 @enderror"
                             >
                         </div>
                     </div>
@@ -104,9 +130,10 @@
                             <input 
                                 type="email" 
                                 id="email" 
-                                name="email" 
+                                name="email"
+                                value="{{ old('email') }}"
                                 required 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('email') border-red-500 @enderror"
                             >
                         </div>
                         <div>
@@ -114,8 +141,9 @@
                             <input 
                                 type="tel" 
                                 id="phone" 
-                                name="phone" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
+                                name="phone"
+                                value="{{ old('phone') }}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('phone') border-red-500 @enderror"
                             >
                         </div>
                     </div>
@@ -124,9 +152,10 @@
                         <input 
                             type="text" 
                             id="subject" 
-                            name="subject" 
+                            name="subject"
+                            value="{{ old('subject') }}"
                             required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('subject') border-red-500 @enderror"
                         >
                     </div>
                     <div>
@@ -136,8 +165,8 @@
                             name="message" 
                             rows="5" 
                             required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500"
-                        ></textarea>
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-amber-500 @error('message') border-red-500 @enderror"
+                        >{{ old('message') }}</textarea>
                     </div>
                     <div class="flex items-start">
                         <input 
@@ -145,7 +174,7 @@
                             id="privacy_policy" 
                             name="privacy_policy" 
                             required 
-                            class="mt-1 rounded text-amber-600 focus:ring-amber-500"
+                            class="mt-1 rounded text-amber-600 focus:ring-amber-500 @error('privacy_policy') border-red-500 @enderror"
                         >
                         <label for="privacy_policy" class="ml-2 text-sm text-gray-600">
                             I agree to the <a href="#" class="text-amber-600 hover:underline">Privacy Policy</a> and consent to Artisan Pottery contacting me.
