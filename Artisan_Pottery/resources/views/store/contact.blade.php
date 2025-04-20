@@ -191,12 +191,13 @@
             <!-- Map -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345093747!2d-122.4194155846816!3d37.77492997975921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050fa5!2s123%20Pottery%20Ln%2C%20San%20Francisco%2C%20CA%2094110%2C%20USA!5e0!3m2!1sen!2sin!4v1633023226784!5m2!1sen!2sin" 
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3052.377681683377!2d-9.238362131804802!3d32.285323815655644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sma!4v1745164388150!5m2!1sen!2sma" 
                     width="100%" 
                     height="100%" 
                     style="border:0;" 
                     allowfullscreen="" 
-                    loading="lazy"
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
             </div>
         </div>
