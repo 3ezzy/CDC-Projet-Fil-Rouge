@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class CartController extends Controller
 {
@@ -145,7 +147,6 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         $total = $this->calculateCartTotal($cart);
         
-        
         return view('store.cart', compact('cart', 'total'));
     }
 
@@ -158,5 +159,72 @@ class CartController extends Controller
         return number_format($total, 2);
     }
 
+    public function checkout()
+    {
+        $cart = session()->get('cart', []);
+        
+        if (empty($cart)) {
+            return redirect()->route('cart.show')->with('error', 'Your cart is empty');
+        }
+        
+        // Set your Stripe API key
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        
+        $lineItems = [];
+        
+        foreach ($cart as $id => $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $item['name'],
+                        'images' => [
+                            isset($item['image_path']) ? asset('storage/' . $item['image_path']) : asset('images/placeholder.jpg')
+                        ],
+                    ],
+                    'unit_amount' => round($item['price'] * 100), // Convert to cents
+                ],
+                'quantity' => $item['quantity'],
+            ];
+        }
+        
+        // Create a checkout session
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel'),
+        ]);
+        
+        return redirect($session->url);
+    }
     
+    public function success(Request $request)
+    {
+        $sessionId = $request->get('session_id');
+        
+        if (!$sessionId) {
+            return redirect()->route('home');
+        }
+        
+        // Set your Stripe API key
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        
+        // Retrieve the session to get details if needed
+        $session = Session::retrieve($sessionId);
+        
+        // Clear the cart
+        session()->forget('cart');
+        
+        // You would typically create an order in your database here
+        // For now, we'll just show the confirmation page
+        
+        return view('store.order-confirmation');
+    }
+    
+    public function cancel()
+    {
+        return redirect()->route('cart.show')->with('error', 'Payment was cancelled.');
+    }
 }

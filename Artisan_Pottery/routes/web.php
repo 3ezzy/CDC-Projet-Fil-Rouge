@@ -34,6 +34,11 @@ Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.a
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
+// Checkout Routes
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/cancel', [CartController::class, 'cancel'])->name('checkout.cancel');
+
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
 Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');

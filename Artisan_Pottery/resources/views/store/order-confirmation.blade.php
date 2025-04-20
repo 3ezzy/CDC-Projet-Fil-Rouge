@@ -22,15 +22,15 @@
                     <div class="space-y-4">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Order Number:</span>
-                            <span class="font-medium">#ORD-2025-4201358</span>
+                            <span class="font-medium">{{ $orderId ?? '#ORD-' . date('Ymd-His') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Date:</span>
-                            <span class="font-medium">2025-04-20 13:58:20</span>
+                            <span class="font-medium">{{ date('Y-m-d H:i:s') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Customer:</span>
-                            <span class="font-medium">3ezzy</span>
+                            <span class="font-medium">{{ auth()->user()->name ?? 'Guest' }}</span>
                         </div>
                     </div>
                 </div>

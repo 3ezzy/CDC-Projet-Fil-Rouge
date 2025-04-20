@@ -142,11 +142,11 @@
                                             <i class="fas fa-arrow-left mr-2"></i>
                                             Continue Shopping
                                         </a>
-                                        <button onclick="proceedToCheckout()"
+                                        <a href="{{ route('checkout') }}"
                                             class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-200">
                                             Proceed to Checkout
                                             <i class="fas fa-arrow-right ml-2"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
