@@ -10,61 +10,48 @@ use Stripe\Checkout\Session;
 class CartController extends Controller
 {
     public function add(Product $product)
-    {
-        // Check if product exists and is in stock
-        if ($product->stock <= 0) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, this product is out of stock.'
-            ], 400);
-        }
-    
-        $cart = session()->get('cart', []);
-    
-        // Use the dynamically calculated total price
-        $price = $product->total_price;
-    
-        if (isset($cart[$product->id])) {
-            // Check if adding more would exceed stock
-            if ($cart[$product->id]['quantity'] >= $product->stock) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry, we don\'t have enough stock.'
-                ], 400);
-            }
-    
-            $cart[$product->id]['quantity']++;
-            $cart[$product->id]['total'] = $cart[$product->id]['quantity'] * $price;
-        } else {
-            $cart[$product->id] = [
-                'name' => $product->name,
-                'quantity' => 1,
-                'price' => $price, // discounted price here
-                'discount' => $product->discount,
-                'total_price' => $price, //  discounted price here
-                'total' => $price, // discounted price here
-                'image_path' => $product->image_path
-            ];
-        }
-    
-        session()->put('cart', $cart);
-    
-        // Calculate cart totals
-        $cartTotal = 0;
-        $itemsCount = 0;
-        foreach ($cart as $item) {
-            $cartTotal += $item['total'];
-            $itemsCount += $item['quantity'];
-        }
-    
-        return response()->json([
-            'success' => true,
-            'message' => 'Product added to cart successfully!',
-            'cart_total' => number_format($cartTotal, 2),
-            'cart_items_count' => $itemsCount
-        ]);
+{
+    // Check if the product exists and is in stock
+    if ($product->stock <= 0) {
+        return redirect()->route('shop')->with('error', 'Sorry, this product is out of stock.');
     }
 
+    // Retrieve the cart from the session or initialize it
+    $cart = session()->get('cart', []);
+
+    // Use the dynamically calculated total price (including discount, if any)
+    $price = $product->discount > 0
+        ? $product->price * (1 - $product->discount / 100)
+        : $product->price;
+
+    // Check if the product is already in the cart
+    if (isset($cart[$product->id])) {
+        // Check if adding more would exceed stock
+        if ($cart[$product->id]['quantity'] >= $product->stock) {
+            return redirect()->route('shop')->with('error', 'Sorry, we don\'t have enough stock.');
+        }
+
+        // Increase the quantity and update the total for the product
+        $cart[$product->id]['quantity']++;
+        $cart[$product->id]['total'] = $cart[$product->id]['quantity'] * $price;
+    } else {
+        // Add the product to the cart
+        $cart[$product->id] = [
+            'name' => $product->name,
+            'quantity' => 1,
+            'price' => number_format($price, 2), // Final price with discount applied
+            'discount' => $product->discount,
+            'total' => number_format($price, 2), // Initial total (price * 1)
+            'image_path' => $product->image_path
+        ];
+    }
+
+    // Save the updated cart back to the session
+    session()->put('cart', $cart);
+
+    // Redirect to the shop route with a success message
+    return redirect()->route('shop')->with('success', 'Product added to cart successfully!');
+}
     public function update(Request $request, $productId)
 {
     $cart = session()->get('cart', []);
