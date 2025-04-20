@@ -23,6 +23,11 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::get('/shop', [ProductController::class, 'indexStore'])->name('shop');
 Route::get('/shop/{product}', [ProductController::class, 'show'])->name('store.products.show'); 
 
+// Order Confirmation Route
+Route::get('/order-confirmation', function () {
+    return view('store.order-confirmation');
+})->name('order.confirmation');
+
 // Cart Routes
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
