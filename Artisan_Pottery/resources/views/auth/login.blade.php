@@ -22,6 +22,12 @@
                     </div>
                 @endif
 
+                @if (session('status'))
+                    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <!-- Social Login Buttons -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <button
@@ -76,7 +82,7 @@
                                 class="h-4 w-4 rounded text-amber-600 focus:ring-amber-500">
                             <label for="remember_me" class="ml-2 text-sm text-gray-600">Remember me</label>
                         </div>
-                        <a href="#" class="text-sm text-amber-600 hover:underline">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="text-sm text-amber-600 hover:underline">Forgot password?</a>
                     </div>
 
                     <div>
