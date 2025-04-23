@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -198,16 +201,84 @@ class CartController extends Controller
         // Set your Stripe API key
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         
-        // Retrieve the session to get details if needed
+        // Retrieve the session to get details
         $session = Session::retrieve($sessionId);
+        
+        // Get cart data before clearing it
+        $cart = session()->get('cart', []);
+        
+        if (empty($cart)) {
+            return redirect()->route('home')->with('error', 'Cart was already processed or is empty.');
+        }
+        
+        // Calculate the total order amount
+        $totalAmount = 0;
+        foreach ($cart as $item) {
+            $totalAmount += $item['price'] * $item['quantity'];
+        }
+        
+        // Create the order
+        $order = new Order();
+        
+        // Only set user_id if the user is authenticated
+        if (Auth::check()) {
+            $order->user_id = Auth::id();
+        }
+        
+        $order->order_number = Order::generateOrderNumber();
+        $order->total_amount = $totalAmount;
+        $order->status = 'processing';
+        $order->payment_status = 'paid';
+        $order->payment_method = 'stripe';
+        $order->payment_id = $session->payment_intent;
+        $order->transaction_id = $sessionId;
+        
+        // Use customer details from session if available or default values
+        $order->shipping_name = $session->customer_details->name ?? 'Guest Customer';
+        $order->shipping_email = $session->customer_details->email ?? 'guest@example.com';
+        $order->shipping_phone = $session->customer_details->phone ?? '';
+        
+        // If there's shipping address in the session
+        if (isset($session->shipping)) {
+            $order->shipping_address = $session->shipping->address->line1 ?? '';
+            $order->shipping_city = $session->shipping->address->city ?? '';
+            $order->shipping_state = $session->shipping->address->state ?? '';
+            $order->shipping_zipcode = $session->shipping->address->postal_code ?? '';
+            $order->shipping_country = $session->shipping->address->country ?? '';
+        } else {
+            // Default values if shipping info isn't available
+            $order->shipping_address = 'N/A';
+            $order->shipping_city = 'N/A';
+            $order->shipping_state = '';
+            $order->shipping_zipcode = 'N/A';
+            $order->shipping_country = 'N/A';
+        }
+        
+        $order->save();
+        
+        // Create order items
+        foreach ($cart as $id => $item) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $id;
+            $orderItem->product_name = $item['name'];
+            $orderItem->price = $item['price'];
+            $orderItem->quantity = $item['quantity'];
+            $orderItem->subtotal = $item['price'] * $item['quantity'];
+            $orderItem->save();
+            
+            // Update product stock
+            $product = Product::find($id);
+            if ($product) {
+                $product->stock -= $item['quantity'];
+                $product->save();
+            }
+        }
         
         // Clear the cart
         session()->forget('cart');
         
-        // You would typically create an order in your database here
-        // For now, we'll just show the confirmation page
-        
-        return view('store.order-confirmation');
+        return view('store.order-confirmation', compact('order'));
     }
     
     public function cancel()

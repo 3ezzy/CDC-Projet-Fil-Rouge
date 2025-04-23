@@ -22,15 +22,23 @@
                     <div class="space-y-4">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Order Number:</span>
-                            <span class="font-medium">{{ $orderId ?? '#ORD-' . date('Ymd-His') }}</span>
+                            <span class="font-medium">{{ $order->order_number ?? '#ORD-' . date('Ymd-His') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Date:</span>
-                            <span class="font-medium">{{ date('Y-m-d H:i:s') }}</span>
+                            <span class="font-medium">{{ $order->created_at->format('Y-m-d H:i:s') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Customer:</span>
-                            <span class="font-medium">{{ auth()->user()->name ?? 'Guest' }}</span>
+                            <span class="font-medium">{{ $order->shipping_name }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Status:</span>
+                            <span class="font-medium">{{ ucfirst($order->status) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Payment Status:</span>
+                            <span class="font-medium">{{ ucfirst($order->payment_status) }}</span>
                         </div>
                     </div>
                 </div>
@@ -39,17 +47,30 @@
                 <div class="mb-8">
                     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center space-x-4">
-                                <img src="path/to/product-image.jpg" alt="Product" class="w-16 h-16 object-cover rounded-lg">
-                                <div>
-                                    <h3 class="font-medium">Elegant Ceramic Vase</h3>
-                                    <p class="text-sm text-gray-500">Quantity: 1</p>
+                        @foreach($order->items as $item)
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-4">
+                                    @php
+                                        $product = App\Models\Product::find($item->product_id);
+                                        $imagePath = $product ? $product->image_path : null;
+                                    @endphp
+                                    
+                                    @if($imagePath)
+                                        <img src="{{ asset('storage/' . $imagePath) }}" alt="{{ $item->product_name }}" class="w-16 h-16 object-cover rounded-lg">
+                                    @else
+                                        <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-image text-gray-400"></i>
+                                        </div>
+                                    @endif
+                                    
+                                    <div>
+                                        <h3 class="font-medium">{{ $item->product_name }}</h3>
+                                        <p class="text-sm text-gray-500">Quantity: {{ $item->quantity }}</p>
+                                    </div>
                                 </div>
+                                <span class="font-medium">${{ number_format($item->subtotal, 2) }}</span>
                             </div>
-                            <span class="font-medium">$89.99</span>
-                        </div>
-                        <!-- Add more products as needed -->
+                        @endforeach
                     </div>
                 </div>
 
@@ -57,15 +78,15 @@
                 <div class="space-y-2 mb-8">
                     <div class="flex justify-between">
                         <span class="text-gray-600">Subtotal:</span>
-                        <span>$89.99</span>
+                        <span>${{ number_format($order->total_amount, 2) }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Shipping:</span>
-                        <span>$5.00</span>
+                        <span>$0.00</span>
                     </div>
                     <div class="flex justify-between text-lg font-semibold">
                         <span>Total:</span>
-                        <span>$94.99</span>
+                        <span>${{ number_format($order->total_amount, 2) }}</span>
                     </div>
                 </div>
 
@@ -76,16 +97,20 @@
                         <div>
                             <h3 class="font-medium text-gray-600 mb-2">Shipping Address</h3>
                             <p class="text-sm">
-                                John Doe<br>
-                                123 Main Street<br>
-                                Apt 4B<br>
-                                New York, NY 10001<br>
-                                United States
+                                {{ $order->shipping_name }}<br>
+                                {{ $order->shipping_address }}<br>
+                                {{ $order->shipping_city }}, {{ $order->shipping_state }} {{ $order->shipping_zipcode }}<br>
+                                {{ $order->shipping_country }}
                             </p>
                         </div>
                         <div>
-                            <h3 class="font-medium text-gray-600 mb-2">Shipping Method</h3>
-                            <p class="text-sm">Standard Shipping (3-5 business days)</p>
+                            <h3 class="font-medium text-gray-600 mb-2">Contact Information</h3>
+                            <p class="text-sm">
+                                Email: {{ $order->shipping_email }}<br>
+                                @if($order->shipping_phone)
+                                    Phone: {{ $order->shipping_phone }}
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </div>
