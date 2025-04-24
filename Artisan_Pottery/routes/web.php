@@ -12,6 +12,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\OrderController;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
@@ -69,6 +70,12 @@ Route::middleware(['auth'])->group(function () {
     // Admin Resource Routes
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
+    
+    // Order Management Routes
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::get('orders-export', [OrderController::class, 'export'])->name('orders.export');
 });
 
 

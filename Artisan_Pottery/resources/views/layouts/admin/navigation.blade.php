@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li>
-                <a href="manage-orders.html"
+                <a href="{{ route('orders.index') }}"
                     class="flex items-center space-x-3 text-gray-600 hover:bg-amber-50 rounded-lg px-4 py-3">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
