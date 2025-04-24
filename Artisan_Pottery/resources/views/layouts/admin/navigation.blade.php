@@ -21,7 +21,6 @@
                 <p class="text-sm text-gray-500">Seller Account</p>
             </div>
         </div>
-        <p class="text-xs text-gray-500 mt-2">Last login: 2025-03-03 12:30:37</p>
     </div>
 
     <!-- Navigation -->
@@ -61,6 +60,16 @@
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
+            </li>
+            
+            <li class="mt-8 pt-6 border-t border-gray-200">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center space-x-3 text-red-600 hover:bg-red-50 rounded-lg px-4 py-3 transition-colors">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>
