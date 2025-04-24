@@ -27,7 +27,7 @@
     <nav class="p-4">
         <ul class="space-y-2">
             <li>
-                <a href="seller-dashboard.html"
+                <a href="{{ route('dashboard') }}"
                     class="flex items-center space-x-3 text-amber-600 bg-amber-50 rounded-lg px-4 py-3">
                     <i class="fas fa-chart-line"></i>
                     <span>Dashboard</span>
