@@ -31,6 +31,11 @@ Route::get('/order-confirmation', function () {
     return view('store.order-confirmation');
 })->name('order.confirmation');
 
+// User Orders Route
+Route::get('/my-orders', function () {
+    return view('store.orders');
+})->middleware(['auth'])->name('store.orders');
+
 // Cart Routes
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
