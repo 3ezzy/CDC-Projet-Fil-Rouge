@@ -14,6 +14,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
@@ -99,3 +101,15 @@ Route::get('products/{product}/reviews/create', [ProductReviewController::class,
 Route::post('products/{productId}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
 
 Route::get('products/{productId}/reviews', [ProductReviewController::class, 'index'])->name('reviews.index');    
+
+// Test Mailtrap integration
+Route::get('/test-mail', function () {
+    $details = [
+        'title' => 'Mail from Artisan Pottery',
+        'body' => 'This is a test email to verify Mailtrap integration'
+    ];
+    
+    Mail::to(Auth::user()->email)->send(new App\Mail\TestMail($details));
+    
+    return 'Email has been sent to your inbox. Please check Mailtrap.';
+})->middleware('auth');    
