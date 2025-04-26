@@ -19,31 +19,55 @@ use Illuminate\Support\Facades\Auth;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
-Route::get('/about', function () {
-    return view('store.about');
-})->name('about');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
 
 // Shop Routes
 Route::get('/shop', [ProductController::class, 'indexStore'])->name('shop');
-Route::get('/shop/{product}', [ProductController::class, 'show'])->name('store.products.show'); 
+Route::get('/shop/{product}', [ProductController::class, 'show'])->name('store.products.show');
 
-// Order Confirmation Route
-Route::get('/order-confirmation', function () {
-    return view('store.order-confirmation');
-})->name('order.confirmation');
+// About and Contact Routes
+Route::get('/about', [StoreController::class, 'about'])->name('about');
 
-// User Orders Route
-Route::get('/my-orders', function () {
-    return view('store.orders');
-})->middleware(['auth'])->name('store.orders');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-// User Profile Routes
-Route::get('/profile', function () {
-    return view('store.profile');
-})->middleware(['auth'])->name('store.profile');
-Route::put('/profile', [ProfileController::class, 'update'])->middleware(['auth'])->name('profile.update');
+Route::middleware(['auth'])->group(function () {
+    // Order Confirmation Route
+    Route::get('/order-confirmation', function () {
+        return view('store.order-confirmation');
+    })->name('order.confirmation');
+
+    // User Orders Route
+    Route::get('/my-orders', function () {
+        return view('store.orders');
+    })->name('store.orders');
+
+    // User Profile Routes
+    Route::get('/profile', function () {
+        return view('store.profile');
+    })->name('store.profile');
+
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Checkout Routes
+    Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel', [CartController::class, 'cancel'])->name('checkout.cancel');
+
+    // admin routes
+
+  
+    // Product Review Routes
+
+    Route::get('products/{product}/reviews/create', [ProductReviewController::class, 'create'])->name('reviews.create');
+    Route::post('products/{productId}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
+
+    Route::get('products/{productId}/reviews', [ProductReviewController::class, 'index'])->name('reviews.index');
+
+    // logout route
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+});
+
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
@@ -51,10 +75,7 @@ Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.a
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-// Checkout Routes
-Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
-Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
-Route::get('/checkout/cancel', [CartController::class, 'cancel'])->name('checkout.cancel');
+
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
@@ -62,45 +83,40 @@ Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])->nam
 Route::post('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 
-// Authentication Routes
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-// Password Reset Routes
-Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+route::middleware(['guest'])->group(function () {
+    // Authentication Routes
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+    
+    // Password Reset Routes
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+});
 
-// Admin Routes
-Route::middleware(['auth'])->group(function () {
+
+route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+
     // Admin Resource Routes
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
-    
+
     // Order Management Routes
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::get('orders-export', [OrderController::class, 'export'])->name('orders.export');
+
+
 });
 
-
-// Product Review Routes
-// Review routes
-Route::middleware('auth')->group(function () {
-});
-Route::get('products/{product}/reviews/create', [ProductReviewController::class, 'create'])->name('reviews.create');
-Route::post('products/{productId}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
-
-Route::get('products/{productId}/reviews', [ProductReviewController::class, 'index'])->name('reviews.index');    
 
 // Test Mailtrap integration
 Route::get('/test-mail', function () {
@@ -108,8 +124,18 @@ Route::get('/test-mail', function () {
         'title' => 'Mail from Artisan Pottery',
         'body' => 'This is a test email to verify Mailtrap integration'
     ];
-    
+
     Mail::to(Auth::user()->email)->send(new App\Mail\TestMail($details));
-    
+
     return 'Email has been sent to your inbox. Please check Mailtrap.';
-})->middleware('auth');    
+})->middleware('auth');
+
+// Test RouteRoute::get('/admin-dashboard', function () {
+    
+Route::get('/admin-dashboard', function () {
+    return 'Welcome to the Admin Dashboard!';
+})->middleware(['auth', 'role:admin']);
+
+Route::get('/example', function () {
+    return response()->json(['message' => 'Hello, encrypted world!']);
+})->middleware(['encrypt.decrypt']);
