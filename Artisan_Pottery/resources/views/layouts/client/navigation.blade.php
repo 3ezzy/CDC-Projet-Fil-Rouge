@@ -39,7 +39,7 @@
                                     <i class="fas fa-chevron-down text-xs"></i>
                                 </button>
                                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible hover:opacity-100 hover:visible transition-all duration-300 ease-in-out">
-                                    <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-amber-50">Profile</a>
+                                    <a href="{{ route('store.profile') }}" class="block px-4 py-2 text-gray-600 hover:bg-amber-50">Profile</a>
                                     <a href="{{ route('store.orders') }}" class="block px-4 py-2 text-gray-600 hover:bg-amber-50">Orders</a>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
@@ -81,7 +81,7 @@
             <a href="{{ route('contact') }}" class="py-2 px-4 text-{{ Request::routeIs('contact') ? 'amber' : 'gray' }}-600 hover:bg-amber-50 rounded-lg">Contact</a>
             @auth
                 <hr class="my-2">
-                <a href="#" class="py-2 px-4 text-gray-600 hover:bg-amber-50 rounded-lg">Profile</a>
+                <a href="{{ route('store.profile') }}" class="py-2 px-4 text-gray-600 hover:bg-amber-50 rounded-lg">Profile</a>
                 <a href="{{ route('store.orders') }}" class="py-2 px-4 text-gray-600 hover:bg-amber-50 rounded-lg">Orders</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

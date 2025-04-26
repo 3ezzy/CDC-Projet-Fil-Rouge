@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 
 // Store Front-end Routes
 Route::get('/', [StoreController::class, 'index'])->name('home');
@@ -35,6 +36,12 @@ Route::get('/order-confirmation', function () {
 Route::get('/my-orders', function () {
     return view('store.orders');
 })->middleware(['auth'])->name('store.orders');
+
+// User Profile Routes
+Route::get('/profile', function () {
+    return view('store.profile');
+})->middleware(['auth'])->name('store.profile');
+Route::put('/profile', [ProfileController::class, 'update'])->middleware(['auth'])->name('profile.update');
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
