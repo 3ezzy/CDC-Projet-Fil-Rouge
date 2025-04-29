@@ -107,148 +107,64 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
+                @foreach($bestSellers as $product)
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
                     <div class="relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1682949695712-2dcfebf5ad79?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Ripple Vase" class="w-full h-64 object-cover" />
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
-                        </div>
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Ripple Vase</h3>
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-amber-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(24 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-gray-400 line-through text-sm">$89.00</span>
-                                <span class="text-amber-600 font-bold ml-2">$69.00</span>
-                            </div>
-                            <button class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                                <i class="fas fa-shopping-bag"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1605883705077-8d3d3cebe78c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGNlcmFtaWMlMjBtdWd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                            alt="Artisan Mug Set" class="w-full h-64 object-cover" />
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
-                        </div>
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Artisan Mug Set</h3>
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-amber-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(36 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-amber-600 font-bold">$45.00</span>
-                            <button class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                                <i class="fas fa-shopping-bag"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                    <div class="relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666974555400-88f1b945a344?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Ceramic Bowl Set" class="w-full h-64 object-cover" />
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Ceramic Bowl Set</h3>
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-amber-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(18 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-amber-600 font-bold">$59.00</span>
-                            <button class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                                <i class="fas fa-shopping-bag"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1633856859910-ab62d9cf10c4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Dinner Plate Set" class="w-full h-64 object-cover" />
+                        <img src="{{ $product->image_path ? asset('storage/' . $product->image_path) : 'https://via.placeholder.com/600x400?text=No+Image' }}"
+                            alt="{{ $product->name }}" class="w-full h-64 object-cover" />
+                        @if($product->discount)
                         <div class="absolute top-4 left-4">
                             <span class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">Sale</span>
                         </div>
+                        @else
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
+                        </div>
+                        @endif
                         <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                                <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
+                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                                   onclick="event.preventDefault(); toggleWishlist({{ $product->id }}, this)">
+                                <i class="fas fa-heart {{ in_array($product->id, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
                             </button>
                         </div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Dinner Plate Set</h3>
+                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">{{ $product->name }}</h3>
                         <div class="flex items-center mb-4">
                             <div class="flex text-amber-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <i class="far fa-star"></i>
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= round($product->review ?? 0))
+                                        <i class="fas fa-star"></i>
+                                    @elseif($i - 0.5 <= round($product->review ?? 0))
+                                        <i class="fas fa-star-half-alt"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
                             </div>
-                            <span class="text-gray-500 text-sm ml-2">(12 reviews)</span>
+                            <span class="text-gray-500 text-sm ml-2">({{ $product->reviews->count() }} reviews)</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <div>
-                                <span class="text-gray-400 line-through text-sm">$79.00</span>
-                                <span class="text-amber-600 font-bold ml-2">$65.00</span>
+                                @if($product->discount)
+                                    <span class="text-gray-400 line-through text-sm">{{ $product->formatted_price }}</span>
+                                    <span class="text-amber-600 font-bold ml-2">{{ $product->formatted_total_price }}</span>
+                                @else
+                                    <span class="text-amber-600 font-bold">{{ $product->formatted_price }}</span>
+                                @endif
                             </div>
-                            <button class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
+                            <a href="{{ route('cart.add', $product->id) }}" 
+                               onclick="event.preventDefault(); document.getElementById('add-to-cart-form-{{ $product->id }}').submit();"
+                               class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
                                 <i class="fas fa-shopping-bag"></i>
-                            </button>
+                            </a>
+                            <form id="add-to-cart-form-{{ $product->id }}" action="{{ route('cart.add', $product->id) }}" method="POST" class="hidden">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -375,3 +291,4 @@
     </section>
 
 @endsection
+
