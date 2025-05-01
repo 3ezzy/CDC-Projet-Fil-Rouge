@@ -19,8 +19,10 @@ class StoreController extends Controller
                             ->orderBy('stock', 'asc') // Assuming lower stock means more sales
                             ->limit(4)
                             ->get();
+
+         $products = Product::all();
         
-        return view('store.index', compact('categories', 'bestSellers'));
+        return view('store.index', compact('categories', 'bestSellers', 'products'));
     }
 
     public function about()

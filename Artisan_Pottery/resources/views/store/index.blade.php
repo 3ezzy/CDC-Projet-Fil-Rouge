@@ -70,7 +70,9 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-6">
                                     <h3 class="font-playfair text-xl font-bold text-white mb-2">{{ $category->name }}</h3>
-                                    <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">{{ $category->description }}</p>
+                                    <p
+                                        class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {{ $category->description }}</p>
                                     <a href="{{ route('shop') }}" class="inline-flex items-center text-white">
                                         <span class="mr-2">Explore Collection</span>
                                         <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
@@ -95,7 +97,8 @@
                     <h2 class="font-playfair text-3xl md:text-4xl font-bold text-gray-800">Best Sellers</h2>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="{{route('shop')}}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                    <a href="{{ route('shop') }}"
+                        class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                         <span>View All Products</span>
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -106,68 +109,77 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @foreach($bestSellers as $product)
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                    <div class="relative">
-                        <img src="{{ $product->image_path ? asset('storage/' . $product->image_path) : 'https://via.placeholder.com/600x400?text=No+Image' }}"
-                            alt="{{ $product->name }}" class="w-full h-64 object-cover" />
-                        @if($product->discount)
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">Sale</span>
-                        </div>
-                        @else
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
-                        </div>
-                        @endif
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                                   onclick="event.preventDefault(); toggleWishlist({{ $product->id }}, this)">
-                                <i class="fas fa-heart {{ in_array($product->id, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
-                            </button>
-                        </div>
+         <!-- Best Sellers Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    @foreach ($bestSellers as $product)
+        <a href="{{ route('store.products.show', $product) }}" class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale block">
+            <!-- Product Image Section -->
+            <div class="relative">
+                @if ($product->image_path)
+                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-64 object-cover">
+                @else
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-image text-gray-400 text-4xl"></i>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">{{ $product->name }}</h3>
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-amber-400">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= round($product->review ?? 0))
-                                        <i class="fas fa-star"></i>
-                                    @elseif($i - 0.5 <= round($product->review ?? 0))
-                                        <i class="fas fa-star-half-alt"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
-                                    @endif
-                                @endfor
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">({{ $product->reviews->count() }} reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                @if($product->discount)
-                                    <span class="text-gray-400 line-through text-sm">{{ $product->formatted_price }}</span>
-                                    <span class="text-amber-600 font-bold ml-2">{{ $product->formatted_total_price }}</span>
-                                @else
-                                    <span class="text-amber-600 font-bold">{{ $product->formatted_price }}</span>
-                                @endif
-                            </div>
-                            <a href="{{ route('cart.add', $product->id) }}" 
-                               onclick="event.preventDefault(); document.getElementById('add-to-cart-form-{{ $product->id }}').submit();"
-                               class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                                <i class="fas fa-shopping-bag"></i>
-                            </a>
-                            <form id="add-to-cart-form-{{ $product->id }}" action="{{ route('cart.add', $product->id) }}" method="POST" class="hidden">
-                                @csrf
-                            </form>
-                        </div>
+                @endif
+
+                @if ($product->discount > 0)
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">-{{ $product->discount }}%</span>
                     </div>
-                </div>
-                @endforeach
+                @else
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
+                    </div>
+                @endif
+
+                <!-- Wishlist Button -->
+                <button type="button"
+                    class="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                    onclick="event.preventDefault(); toggleWishlist({{ $product->id }}, this)">
+                    <i class="fas fa-heart {{ in_array($product->id, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-600' }}"></i>
+                </button>
             </div>
+
+            <!-- Product Info Section -->
+            <div class="p-6">
+                <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">{{ $product->name }}</h3>
+
+                <!-- Rating Stars -->
+                <div class="flex items-center mb-2">
+                    @php
+                        $averageRating = $product->reviews->avg('rating') ?? 0; // Calculate the average rating
+                    @endphp
+                    @for ($i = 1; $i <= 5; $i++)
+                        <i class="fas fa-star {{ $i <= $averageRating ? 'text-amber-400' : 'text-gray-300' }}"></i>
+                    @endfor
+                    <span class="text-gray-500 text-sm ml-2">({{ $product->reviews->count() }} reviews)</span>
+                </div>
+
+                <!-- Price and Cart Section -->
+                <div class="flex justify-between items-center">
+                    <div>
+                        @if ($product->discount > 0)
+                            <span class="text-gray-400 line-through text-sm">{{ $product->formatted_price }}</span>
+                            <span class="text-amber-600 font-bold ml-2">{{ $product->formatted_total_price }}</span>
+                        @else
+                            <span class="text-amber-600 font-bold">{{ $product->formatted_price }}</span>
+                        @endif
+                    </div>
+                    <form id="add-to-cart-form-{{ $product->id }}" action="{{ route('cart.add', $product->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
+                            <i class="fas fa-shopping-bag"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </a>
+    @endforeach
+</div>
         </div>
     </section>
+
 
     <!-- Brand Story Section -->
     <section class="relative py-20 bg-white overflow-hidden">
@@ -194,7 +206,8 @@
                         but also
                         environmentally responsible.
                     </p>
-                    <a href="{{ route('about') }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                    <a href="{{ route('about') }}"
+                        class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                         <span>Learn More About Our Process</span>
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -289,6 +302,107 @@
             </div>
         </div>
     </section>
+@push('scripts')
+<script>
+  function addToCart(productId) {
+                        // Prevent navigation to product detail when clicking add to cart
+                        event.preventDefault();
 
+                        // Your existing addToCart logic here
+                        fetch(`/cart/add/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json',
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Handle success
+                                // You might want to show a notification or update cart count
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    }
+
+                    function toggleWishlist(productId, button) {
+                        // Prevent navigation to product detail when clicking wishlist
+                        event.preventDefault();
+
+                        fetch(`/wishlist/toggle/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Update heart icon
+                                const heartIcon = button.querySelector('i');
+                                if (data.in_wishlist) {
+                                    heartIcon.classList.remove('text-gray-600');
+                                    heartIcon.classList.add('text-red-500');
+                                } else {
+                                    heartIcon.classList.remove('text-red-500');
+                                    heartIcon.classList.add('text-gray-600');
+                                }
+
+                                // Update wishlist counter in navigation
+                                updateWishlistCounter(data.wishlist_count);
+
+                                // Show notification
+                                showNotification(data.message, 'success');
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                showNotification('An error occurred', 'error');
+                            });
+                    }
+
+                    function updateWishlistCounter(count) {
+                        // Get the wishlist counter element in the navigation
+                        const navWishlistCounters = document.querySelectorAll('.fa-heart + span');
+
+                        navWishlistCounters.forEach(counter => {
+                            if (count > 0) {
+                                counter.textContent = count;
+                                counter.classList.remove('hidden');
+                            } else {
+                                counter.classList.add('hidden');
+                            }
+                        });
+                    }
+
+                    function showNotification(message, type) {
+                        // Check if there's an existing notification system
+                        // If not, create a simple one
+                        const notification = document.createElement('div');
+                        notification.classList.add(
+                            'fixed', 'top-4', 'right-4', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg',
+                            'z-50', 'transition-opacity', 'duration-500'
+                        );
+
+                        if (type === 'success') {
+                            notification.classList.add('bg-green-100', 'text-green-800');
+                        } else {
+                            notification.classList.add('bg-red-100', 'text-red-800');
+                        }
+
+                        notification.textContent = message;
+                        document.body.appendChild(notification);
+
+                        // Remove notification after 3 seconds
+                        setTimeout(() => {
+                            notification.classList.add('opacity-0');
+                            setTimeout(() => {
+                                document.body.removeChild(notification);
+                            }, 500);
+                        }, 3000);
+                    }
+</script>
+    
+@endpush
 @endsection
-

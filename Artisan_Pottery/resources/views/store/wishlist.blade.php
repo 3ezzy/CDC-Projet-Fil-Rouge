@@ -3,7 +3,7 @@
 @section('title', 'Wishlist')
 
 @section('content')
-<section class="py-16 px-4 sm:px-6 lg:px-8 bg-[#f8f5f2]">
+<section class="py-16 px-4 sm:px-6 lg:px-8 bg-[#f8f5f2] mt-16">
     <div class="max-w-7xl mx-auto">
         <div class="mb-8">
             <h1 class="text-3xl font-playfair font-bold text-gray-800 mb-4">My Wishlist</h1>
