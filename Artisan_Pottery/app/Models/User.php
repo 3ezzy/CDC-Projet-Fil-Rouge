@@ -54,8 +54,35 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function getRoleAttribute()
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
     {
-        return $this->attributes['role'];
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+   /**
+     * Check if user has a specific role
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Check if the user is an admin
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
     }
 }

@@ -134,7 +134,7 @@ Route::get('/test-mail', function () {
     
 Route::get('/admin-dashboard', function () {
     return 'Welcome to the Admin Dashboard!';
-})->middleware(['auth', 'role:admin']);
+})->middleware(['auth', 'admin']);
 
 Route::get('/example', function () {
     return response()->json(['message' => 'Hello, encrypted world!']);

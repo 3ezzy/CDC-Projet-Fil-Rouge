@@ -12,7 +12,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-playfair font-bold text-gray-800 mb-2">Welcome back,
-                        3ezzy!</h1>
+                        {{ Auth::user()->first_name }}!</h1>
                     <p class="text-sm sm:text-base text-gray-600">Here's what's happening with your store
                         today.</p>
                 </div>
@@ -28,10 +28,19 @@
                     <div class="bg-amber-100 p-2 sm:p-3 rounded-full">
                         <i class="fas fa-dollar-sign text-amber-600"></i>
                     </div>
-                    <span class="text-xs sm:text-sm text-green-500">+12.5%</span>
+                    <span class="text-xs sm:text-sm text-green-500">
+                        @php
+                            $lastMonthSales = App\Models\Order::where('created_at', '<', now()->startOfMonth())
+                                ->where('created_at', '>=', now()->subMonths(1)->startOfMonth())
+                                ->sum('total_amount');
+                            $currentMonthSales = App\Models\Order::where('created_at', '>=', now()->startOfMonth())->sum('total_amount');
+                            $percentChange = $lastMonthSales > 0 ? round((($currentMonthSales - $lastMonthSales) / $lastMonthSales) * 100, 1) : 0;
+                        @endphp
+                        {{ $percentChange > 0 ? '+' . $percentChange : $percentChange }}%
+                    </span>
                 </div>
                 <h3 class="text-gray-600 text-xs sm:text-sm mb-1">Total Sales</h3>
-                <p class="text-xl sm:text-2xl font-bold text-gray-800">$12,426</p>
+                <p class="text-xl sm:text-2xl font-bold text-gray-800">${{ number_format(App\Models\Order::sum('total_amount'), 2) }}</p>
             </div>
 
             <!-- Total Orders -->
@@ -40,10 +49,19 @@
                     <div class="bg-blue-100 p-2 sm:p-3 rounded-full">
                         <i class="fas fa-shopping-bag text-blue-600"></i>
                     </div>
-                    <span class="text-xs sm:text-sm text-green-500">+8.2%</span>
+                    <span class="text-xs sm:text-sm text-green-500">
+                        @php
+                            $lastMonthOrders = App\Models\Order::where('created_at', '<', now()->startOfMonth())
+                                ->where('created_at', '>=', now()->subMonths(1)->startOfMonth())
+                                ->count();
+                            $currentMonthOrders = App\Models\Order::where('created_at', '>=', now()->startOfMonth())->count();
+                            $percentChange = $lastMonthOrders > 0 ? round((($currentMonthOrders - $lastMonthOrders) / $lastMonthOrders) * 100, 1) : 0;
+                        @endphp
+                        {{ $percentChange > 0 ? '+' . $percentChange : $percentChange }}%
+                    </span>
                 </div>
                 <h3 class="text-gray-600 text-xs sm:text-sm mb-1">Total Orders</h3>
-                <p class="text-xl sm:text-2xl font-bold text-gray-800">284</p>
+                <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ App\Models\Order::count() }}</p>
             </div>
 
             <!-- Average Rating -->
@@ -52,10 +70,20 @@
                     <div class="bg-yellow-100 p-2 sm:p-3 rounded-full">
                         <i class="fas fa-star text-yellow-600"></i>
                     </div>
-                    <span class="text-xs sm:text-sm text-green-500">+0.3</span>
+                    <span class="text-xs sm:text-sm text-green-500">
+                        @php
+                            $reviews = App\Models\ProductReview::all();
+                            $avgRating = $reviews->count() > 0 ? round($reviews->avg('rating'), 1) : 0;
+                            $lastMonthAvg = App\Models\ProductReview::where('created_at', '<', now()->startOfMonth())
+                                ->where('created_at', '>=', now()->subMonths(1)->startOfMonth())
+                                ->avg('rating') ?: 0;
+                            $ratingChange = $lastMonthAvg > 0 ? round($avgRating - $lastMonthAvg, 1) : 0;
+                        @endphp
+                        {{ $ratingChange > 0 ? '+' . $ratingChange : $ratingChange }}
+                    </span>
                 </div>
                 <h3 class="text-gray-600 text-xs sm:text-sm mb-1">Average Rating</h3>
-                <p class="text-xl sm:text-2xl font-bold text-gray-800">4.8</p>
+                <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $avgRating }}</p>
             </div>
 
             <!-- Total Products -->
@@ -64,10 +92,15 @@
                     <div class="bg-purple-100 p-2 sm:p-3 rounded-full">
                         <i class="fas fa-box text-purple-600"></i>
                     </div>
-                    <span class="text-xs sm:text-sm text-amber-600">+5</span>
+                    <span class="text-xs sm:text-sm text-amber-600">
+                        @php
+                            $newProducts = App\Models\Product::where('created_at', '>=', now()->subDays(30))->count();
+                        @endphp
+                        +{{ $newProducts }}
+                    </span>
                 </div>
                 <h3 class="text-gray-600 text-xs sm:text-sm mb-1">Total Products</h3>
-                <p class="text-xl sm:text-2xl font-bold text-gray-800">46</p>
+                <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ App\Models\Product::count() }}</p>
             </div>
         </div>
 
@@ -75,7 +108,7 @@
         <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
             <div class="flex items-center justify-between mb-4 sm:mb-6">
                 <h3 class="font-playfair text-lg sm:text-xl font-bold text-gray-800">Recent Orders</h3>
-                <a href="manage-orders.html" class="text-sm text-amber-600 hover:text-amber-700">View
+                <a href="{{ route('orders.index') }}" class="text-sm text-amber-600 hover:text-amber-700">View
                     All</a>
             </div>
             <div class="overflow-x-auto -mx-4 sm:-mx-6">
@@ -94,51 +127,43 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach(App\Models\Order::with(['user', 'items.product'])->latest()->take(3)->get() as $order)
                             <tr class="border-b">
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">#ORD-7842</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm hidden sm:table-cell">Sarah
-                                    Johnson</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">Ceramic Vase Set</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">$128.50</td>
+                                <td class="py-3 sm:py-4 text-xs sm:text-sm">{{ $order->order_number }}</td>
+                                <td class="py-3 sm:py-4 text-xs sm:text-sm hidden sm:table-cell">
+                                    {{ $order->shipping_name ?: ($order->user->first_name . ' ' . $order->user->last_name) }}
+                                </td>
+                                <td class="py-3 sm:py-4 text-xs sm:text-sm">
+                                    {{ $order->items->first()->product_name ?? 'Multiple Items' }}
+                                    @if($order->items->count() > 1)
+                                        <span class="text-gray-500 text-xs">(+{{ $order->items->count() - 1 }} more)</span>
+                                    @endif
+                                </td>
+                                <td class="py-3 sm:py-4 text-xs sm:text-sm">${{ number_format($order->total_amount, 2) }}</td>
                                 <td class="py-3 sm:py-4">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Completed</span>
+                                    @php
+                                        $statusColors = [
+                                            'pending' => 'yellow',
+                                            'processing' => 'yellow',
+                                            'shipped' => 'blue',
+                                            'delivered' => 'green',
+                                            'completed' => 'green',
+                                            'cancelled' => 'red'
+                                        ];
+                                        $status = strtolower($order->status);
+                                        $color = $statusColors[$status] ?? 'gray';
+                                    @endphp
+                                    <span class="px-2 py-1 bg-{{ $color }}-100 text-{{ $color }}-700 rounded-full text-xs">
+                                        {{ ucfirst($order->status) }}
+                                    </span>
                                 </td>
                                 <td class="py-3 sm:py-4">
-                                    <button
-                                        class="text-xs sm:text-sm text-amber-600 hover:text-amber-700">Details</button>
+                                    <a href="{{ route('orders.show', $order) }}" class="text-xs sm:text-sm text-amber-600 hover:text-amber-700">
+                                        Details
+                                    </a>
                                 </td>
                             </tr>
-                            <tr class="border-b">
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">#ORD-7841</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm hidden sm:table-cell">Mike Peters
-                                </td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">Dinner Plate Set</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">$95.00</td>
-                                <td class="py-3 sm:py-4">
-                                    <span
-                                        class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Processing</span>
-                                </td>
-                                <td class="py-3 sm:py-4">
-                                    <button
-                                        class="text-xs sm:text-sm text-amber-600 hover:text-amber-700">Details</button>
-                                </td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">#ORD-7840</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm hidden sm:table-cell">Emma
-                                    Thompson</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">Tea Set Collection</td>
-                                <td class="py-3 sm:py-4 text-xs sm:text-sm">$245.00</td>
-                                <td class="py-3 sm:py-4">
-                                    <span
-                                        class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Shipped</span>
-                                </td>
-                                <td class="py-3 sm:py-4">
-                                    <button
-                                        class="text-xs sm:text-sm text-amber-600 hover:text-amber-700">Details</button>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

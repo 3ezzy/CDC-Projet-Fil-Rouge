@@ -67,7 +67,9 @@ class Kernel extends HttpKernel
         // Add your custom middleware aliases here
         'auth.custom' => \App\Http\Middleware\AuthMiddleware::class,
         'guest.custom' => \App\Http\Middleware\GuestMiddleware::class,
-        'role' => \App\Http\Middleware\RoleMiddleware::class, 
-        'encrypt.decrypt' => \App\Http\Middleware\EncryptDecryptMiddleware::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class
+        
     ];
+   
+    
 }
