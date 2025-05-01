@@ -17,7 +17,7 @@
                 <span class="text-white font-bold">3E</span>
             </div>
             <div>
-                <h3 class="font-medium text-gray-800">3ezzy</h3>
+                <h3 class="font-medium text-gray-800">{{ Auth::user()->first_name }}</h3>
                 <p class="text-sm text-gray-500">Seller Account</p>
             </div>
         </div>
