@@ -32,6 +32,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware(['auth'])->group(function () {
+    // Regular user routes for authenticated users
     // Order Confirmation Route
     Route::get('/order-confirmation', function () {
         return view('store.order-confirmation');
@@ -54,18 +55,31 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/cancel', [CartController::class, 'cancel'])->name('checkout.cancel');
 
-    // admin routes
-
-  
     // Product Review Routes
-
     Route::get('products/{product}/reviews/create', [ProductReviewController::class, 'create'])->name('reviews.create');
     Route::post('products/{productId}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
-
     Route::get('products/{productId}/reviews', [ProductReviewController::class, 'index'])->name('reviews.index');
 
-    // logout route
+    // Logout route
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+// Admin routes with admin middleware
+Route::middleware(['admin'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Admin Resource Routes
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+
+    // Order Management Routes
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::get('orders-export', [OrderController::class, 'export'])->name('orders.export');
 });
 
 
@@ -84,37 +98,18 @@ Route::post('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->nam
 Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 
 
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
 route::middleware(['guest'])->group(function () {
     // Authentication Routes
-    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('register', [RegisterController::class, 'register']);
-    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
     
     // Password Reset Routes
     Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-});
-
-
-route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
-    // Admin Resource Routes
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
-
-    // Order Management Routes
-    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-    Route::get('orders-export', [OrderController::class, 'export'])->name('orders.export');
-
-
 });
 
 
@@ -132,10 +127,10 @@ Route::get('/test-mail', function () {
 
 // Test RouteRoute::get('/admin-dashboard', function () {
     
-Route::get('/admin-dashboard', function () {
-    return 'Welcome to the Admin Dashboard!';
-})->middleware(['admin']);
+// Route::get('/admin-dashboard', function () {
+//     return 'Welcome to the Admin Dashboard!';
+// })->middleware(['auth', 'role:admin']);
 
-Route::get('/example', function () {
-    return response()->json(['message' => 'Hello, encrypted world!']);
-})->middleware(['encrypt.decrypt']);
+// Route::get('/example', function () {
+//     return response()->json(['message' => 'Hello, encrypted world!']);
+// })->middleware(['encrypt.decrypt']);

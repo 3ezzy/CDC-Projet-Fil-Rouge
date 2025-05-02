@@ -10,7 +10,7 @@ class GuestMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (session()->has('user')) {
-            return redirect('/dashboard')->with('info', 'You are already logged in');
+            return redirect('/')->with('info', 'You are already logged in');
         }
         
         return $next($request);

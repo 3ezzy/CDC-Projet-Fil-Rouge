@@ -13,6 +13,7 @@ class AuthMiddleware
             return redirect('/login')->with('error', 'Please login first');
         }
         
+        // dd(session()->has('user'));
         return $next($request);
     }
 }

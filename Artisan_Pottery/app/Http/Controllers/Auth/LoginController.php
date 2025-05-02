@@ -22,7 +22,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
-
+            session()->push('user', $user);
 
             if ($user->role === 'admin') {
                 return redirect()->route('dashboard')->with('success', 'Welcome, Admin!');
