@@ -14,6 +14,7 @@ class AdminMiddleware
             return $next($request);
         }
 
-        abort(403, 'Unauthorized');
+        // Redirect back with notification instead of showing 403 page
+        return redirect()->back()->with('error', 'You do not have permission to access this page.');
     }
 }
