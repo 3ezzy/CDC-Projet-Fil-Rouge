@@ -19,7 +19,18 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'first_name', 'last_name', 'role', 'email', 'password', 'phone', 'terms',
+        'first_name',
+        'last_name',
+        'role',
+        'email',
+        'password',
+        'phone',
+        'terms',
+        'street_address',
+        'city',
+        'state',
+        'postal_code',
+        'country',
     ];
 
     /**
@@ -65,7 +76,7 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-   /**
+    /**
      * Check if user has a specific role
      *
      * @param string $role

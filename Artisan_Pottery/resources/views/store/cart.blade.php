@@ -121,7 +121,8 @@
                                     <div class="space-y-4">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Subtotal</span>
-                                            <span class="font-medium text-gray-800">${{ number_format((float)$total, 2) }}</span>
+                                            <span
+                                                class="font-medium text-gray-800">${{ number_format((float) $total, 2) }}</span>
                                         </div>
                                         <div class="flex justify-between text-sm">
                                             <span class="text-gray-600">Shipping</span>
@@ -131,7 +132,7 @@
                                             <div class="flex justify-between">
                                                 <span class="text-lg font-semibold text-gray-900">Total</span>
                                                 <span
-                                                    class="text-lg font-semibold text-gray-900">${{ number_format((float)$total, 2) }}</span>
+                                                    class="text-lg font-semibold text-gray-900">${{ number_format((float) $total, 2) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -167,73 +168,176 @@
                         @endif
                     </div>
                 </div>
+                <!-- Shipping Address Form -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">Shipping Address</h2>
+
+                        <form action="{{ route('profile.updateadress') }}" method="POST" class="space-y-6">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="flex flex-col space-y-4">
+                                <div>
+                                    <label for="street_address" class="block text-sm font-medium text-gray-700">Street
+                                        Address</label>
+                                    <input type="text" name="street_address" id="street_address"
+                                        value="{{ Auth::user()->street_address ?? '' }}"
+                                        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                    @error('street_address')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <div class="flex-1">
+                                        <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                                        <input type="text" name="city" id="city"
+                                            value="{{ Auth::user()->city ?? '' }}"
+                                            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                        @error('city')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <label for="state"
+                                            class="block text-sm font-medium text-gray-700">State/Province</label>
+                                        <input type="text" name="state" id="state"
+                                            value="{{ Auth::user()->state ?? '' }}"
+                                            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                        @error('state')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <div class="flex-1">
+                                        <label for="postal_code" class="block text-sm font-medium text-gray-700">Postal
+                                            Code</label>
+                                        <input type="text" name="postal_code" id="postal_code"
+                                            value="{{ Auth::user()->postal_code ?? '' }}"
+                                            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                        @error('postal_code')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <label for="country"
+                                            class="block text-sm font-medium text-gray-700">Country</label>
+                                        <select name="country" id="country"
+                                            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                            <option value="">Select Country</option>
+                                            <option value="US" {{ Auth::user()->country == 'US' ? 'selected' : '' }}>
+                                                United States</option>
+                                            <option value="CA" {{ Auth::user()->country == 'CA' ? 'selected' : '' }}>
+                                                Canada</option>
+                                            <option value="GB" {{ Auth::user()->country == 'GB' ? 'selected' : '' }}>
+                                                United Kingdom</option>
+                                        </select>
+                                        @error('country')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone
+                                        Number</label>
+                                    <input type="tel" name="phone" id="phone"
+                                        value="{{ Auth::user()->phone ?? '' }}"
+                                        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                    @error('phone')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Cart Summary -->
+                            <div class="mt-8 border-t border-gray-200 pt-6">
+                                
+
+                                <div class="mt-8 flex flex-col gap-4">
+                                    <button type="submit"
+                                        class="w-full px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                                        Save Address 
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 @endsection
 
 @push('scripts')
-<script>
-    function updateQuantity(productId, action) {
-        fetch(`/cart/update/${productId}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                action: action
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                showNotification(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Failed to update quantity', 'error');
-        });
-    }
-
-    function removeItem(productId) {
-        if (confirm('Are you sure you want to remove this item?')) {
-            fetch(`/cart/remove/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Failed to remove item', 'error');
-            });
+    <script>
+        function updateQuantity(productId, action) {
+            fetch(`/cart/update/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        showNotification(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Failed to update quantity', 'error');
+                });
         }
-    }
 
-    function showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white z-50`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
+        function removeItem(productId) {
+            if (confirm('Are you sure you want to remove this item?')) {
+                fetch(`/cart/remove/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            showNotification(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Failed to remove item', 'error');
+                    });
+            }
+        }
 
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
-    }
-</script>
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className =
+                `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white z-50`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
 @endpush

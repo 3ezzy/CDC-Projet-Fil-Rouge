@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('store.profile');
 
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/update-address', [ProfileController::class, 'updateAddress'])->name('profile.updateadress');
 
     // Checkout Routes
     Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');

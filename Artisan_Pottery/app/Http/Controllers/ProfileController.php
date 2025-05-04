@@ -48,4 +48,34 @@ class ProfileController extends Controller
         
         return back()->with('success', 'Profile updated successfully!');
     }
+
+    public function updateAddress(Request $request)
+    {
+        $user = User::find(Auth::id());
+        
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+        
+        $validated = $request->validate([
+            'street_address' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
+            'country' => ['nullable', 'string', 'max:2'],
+            'phone' => ['nullable', 'string', 'max:20'],
+        ]);
+        
+        // Assign properties directly
+        $user->street_address = $validated['street_address'];
+        $user->city = $validated['city'];
+        $user->state = $validated['state'];
+        $user->postal_code = $validated['postal_code'];
+        $user->country = $validated['country'];
+        $user->phone = $validated['phone'];
+        
+        $user->save();
+        
+        return redirect()->back()->with('success', 'Shipping address updated successfully!');
+    }
 } 
