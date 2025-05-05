@@ -17,8 +17,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        foreach (glob(base_path('helpers/*.php')) as $filename) {
+            require_once $filename;
+        }
     }
 }

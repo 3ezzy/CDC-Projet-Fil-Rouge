@@ -225,17 +225,14 @@
                                     </div>
 
                                     <div class="flex-1">
-                                        <label for="country"
-                                            class="block text-sm font-medium text-gray-700">Country</label>
-                                        <select name="country" id="country"
-                                            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                        <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                                        <select name="country" id="country" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                                             <option value="">Select Country</option>
-                                            <option value="US" {{ Auth::user()->country == 'US' ? 'selected' : '' }}>
-                                                United States</option>
-                                            <option value="CA" {{ Auth::user()->country == 'CA' ? 'selected' : '' }}>
-                                                Canada</option>
-                                            <option value="GB" {{ Auth::user()->country == 'GB' ? 'selected' : '' }}>
-                                                United Kingdom</option>
+                                            @foreach ($countries as $code => $name)
+                                                <option value="{{ $code }}" {{ Auth::user() && Auth::user()->country == $code ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                         @error('country')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

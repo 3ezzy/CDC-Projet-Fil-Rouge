@@ -12,6 +12,7 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "rinvex/country": "^2.0",
         "stripe/stripe-php": "^17.1"
     },
     "require-dev": {
@@ -29,7 +30,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "helpers/countries.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
