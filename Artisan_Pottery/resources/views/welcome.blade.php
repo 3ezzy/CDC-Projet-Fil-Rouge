@@ -62,18 +62,20 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Category 1 -->
+            @foreach ([
+                ['name' => 'Vases', 'image' => 'https://images.unsplash.com/photo-1597696929736-6d13bed8e6a8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'description' => 'Beautiful vessels for your flowers and decorative accents.'],
+                ['name' => 'Dinnerware', 'image' => 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2VyYW1pYyUyMGRpbm5lcndhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60', 'description' => 'Elegant plates, bowls, and serving pieces for your table.'],
+                ['name' => 'Drinkware', 'image' => 'https://plus.unsplash.com/premium_photo-1666974578443-8dd11ef53c38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'description' => 'Handcrafted mugs, cups, and glasses for your favorite beverages.']
+            ] as $category)
             <div class="group">
                 <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                    <img src="https://images.unsplash.com/photo-1597696929736-6d13bed8e6a8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Vases" class="w-full h-80 object-cover" />
+                    <img src="{{ $category['image'] }}" alt="{{ $category['name'] }}" class="w-full h-80 object-cover" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                         <div class="p-6">
-                            <h3 class="font-playfair text-xl font-bold text-white mb-2">Vases</h3>
-                            <p
-                                class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                Beautiful vessels for your flowers and decorative accents.</p>
-                            <a href="product.html?category=vases" class="inline-flex items-center text-white">
+                            <h3 class="font-playfair text-xl font-bold text-white mb-2">{{ $category['name'] }}</h3>
+                            <p class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                {{ $category['description'] }}</p>
+                            <a href="product.html?category={{ strtolower($category['name']) }}" class="inline-flex items-center text-white">
                                 <span class="mr-2">Explore Collection</span>
                                 <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                             </a>
@@ -81,46 +83,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Category 2 -->
-            <div class="group">
-                <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                    <img src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2VyYW1pYyUyMGRpbm5lcndhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                        alt="Dinnerware" class="w-full h-80 object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                        <div class="p-6">
-                            <h3 class="font-playfair text-xl font-bold text-white mb-2">Dinnerware</h3>
-                            <p
-                                class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                Elegant plates, bowls, and serving pieces for your table.</p>
-                            <a href="product.html?category=dinnerware" class="inline-flex items-center text-white">
-                                <span class="mr-2">Explore Collection</span>
-                                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 3 -->
-            <div class="group">
-                <div class="relative overflow-hidden rounded-2xl hover-scale mb-4">
-                    <img src="https://plus.unsplash.com/premium_photo-1666974578443-8dd11ef53c38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Drinkware" class="w-full h-80 object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                        <div class="p-6">
-                            <h3 class="font-playfair text-xl font-bold text-white mb-2">Drinkware</h3>
-                            <p
-                                class="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                Handcrafted mugs, cups, and glasses for your favorite beverages.</p>
-                            <a href="product.html?category=drinkware" class="inline-flex items-center text-white">
-                                <span class="mr-2">Explore Collection</span>
-                                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -134,8 +97,7 @@
                 <h2 class="font-playfair text-3xl md:text-4xl font-bold text-gray-800">Best Sellers</h2>
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="product.html"
-                    class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                <a href="product.html" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                     <span>View All Products</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -147,156 +109,90 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Product 1 -->
+            @php
+            $products = [
+                [
+                    'name' => 'Ripple Vase',
+                    'image' => 'https://plus.unsplash.com/premium_photo-1682949695712-2dcfebf5ad79?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    'rating' => 4.5,
+                    'reviews' => 24,
+                    'price' => 69.00,
+                    'original_price' => 89.00,
+                    'badge' => 'Best Seller'
+                ],
+                [
+                    'name' => 'Artisan Mug Set',
+                    'image' => 'https://images.unsplash.com/photo-1605883705077-8d3d3cebe78c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGNlcmFtaWMlMjBtdWd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
+                    'rating' => 5,
+                    'reviews' => 36,
+                    'price' => 45.00,
+                    'badge' => 'Best Seller'
+                ],
+                [
+                    'name' => 'Ceramic Bowl Set',
+                    'image' => 'https://plus.unsplash.com/premium_photo-1666974555400-88f1b945a344?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    'rating' => 4,
+                    'reviews' => 18,
+                    'price' => 59.00
+                ],
+                [
+                    'name' => 'Dinner Plate Set',
+                    'image' => 'https://images.unsplash.com/photo-1633856859910-ab62d9cf10c4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                    'rating' => 3.5,
+                    'reviews' => 12,
+                    'price' => 65.00,
+                    'original_price' => 79.00,
+                    'badge' => 'Sale'
+                ]
+            ];
+            @endphp
+
+            @foreach ($products as $index => $product)
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
                 <div class="relative">
-                    <img src="https://plus.unsplash.com/premium_photo-1682949695712-2dcfebf5ad79?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Ripple Vase" class="w-full h-64 object-cover" />
+                    <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="w-full h-64 object-cover" />
+                    @if(isset($product['badge']))
                     <div class="absolute top-4 left-4">
-                        <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
+                        <span class="bg-{{ $product['badge'] == 'Sale' ? 'red-500' : 'amber-600' }} text-white text-xs px-3 py-1.5 rounded-full">{{ $product['badge'] }}</span>
                     </div>
+                    @endif
                     <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
-                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
+                            onclick="event.preventDefault(); toggleWishlist({{ $index + 1 }}, this)">
+                            <i class="fas fa-heart text-gray-400 hover:text-red-500"></i>
                         </button>
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Ripple Vase</h3>
+                    <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">{{ $product['name'] }}</h3>
                     <div class="flex items-center mb-4">
                         <div class="flex text-amber-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= floor($product['rating']))
+                                    <i class="fas fa-star"></i>
+                                @elseif ($i - 0.5 <= $product['rating'])
+                                    <i class="fas fa-star-half-alt"></i>
+                                @else
+                                    <i class="far fa-star"></i>
+                                @endif
+                            @endfor
                         </div>
-                        <span class="text-gray-500 text-sm ml-2">(24 reviews)</span>
+                        <span class="text-gray-500 text-sm ml-2">({{ $product['reviews'] }} reviews)</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <div>
-                            <span class="text-gray-400 line-through text-sm">$89.00</span>
-                            <span class="text-amber-600 font-bold ml-2">$69.00</span>
+                            @if(isset($product['original_price']))
+                            <span class="text-gray-400 line-through text-sm">${{ number_format($product['original_price'], 2) }}</span>
+                            @endif
+                            <span class="text-amber-600 font-bold {{ isset($product['original_price']) ? 'ml-2' : '' }}">${{ number_format($product['price'], 2) }}</span>
                         </div>
-                        <button
-                            class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
                             <i class="fas fa-shopping-bag"></i>
                         </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Product 2 -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1605883705077-8d3d3cebe78c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGNlcmFtaWMlMjBtdWd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                        alt="Artisan Mug Set" class="w-full h-64 object-cover" />
-                    <div class="absolute top-4 left-4">
-                        <span class="bg-amber-600 text-white text-xs px-3 py-1.5 rounded-full">Best Seller</span>
-                    </div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
-                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Artisan Mug Set</h3>
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-amber-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <span class="text-gray-500 text-sm ml-2">(36 reviews)</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-amber-600 font-bold">$45.00</span>
-                        <button
-                            class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                            <i class="fas fa-shopping-bag"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                <div class="relative">
-                    <img src="https://plus.unsplash.com/premium_photo-1666974555400-88f1b945a344?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Ceramic Bowl Set" class="w-full h-64 object-cover" />
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
-                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Ceramic Bowl Set</h3>
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-amber-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                        <span class="text-gray-500 text-sm ml-2">(18 reviews)</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-amber-600 font-bold">$59.00</span>
-                        <button
-                            class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                            <i class="fas fa-shopping-bag"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover-scale">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1633856859910-ab62d9cf10c4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Dinner Plate Set" class="w-full h-64 object-cover" />
-                    <div class="absolute top-4 left-4">
-                        <span class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">Sale</span>
-                    </div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                               onclick="event.preventDefault(); toggleWishlist({{ $product->id ?? 1 }}, this)">
-                            <i class="fas fa-heart {{ in_array($product->id ?? 1, array_keys(session('wishlist', []))) ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }}"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-playfair text-xl font-bold text-gray-800 mb-2">Dinner Plate Set</h3>
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-amber-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                        <span class="text-gray-500 text-sm ml-2">(12 reviews)</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-gray-400 line-through text-sm">$79.00</span>
-                            <span class="text-amber-600 font-bold ml-2">$65.00</span>
-                        </div>
-                        <button
-                            class="bg-amber-600 hover:bg-amber-700 text-white p-2 rounded-full transition-colors">
-                            <i class="fas fa-shopping-bag"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -316,18 +212,14 @@
                     and Purpose</h2>
                 <p class="text-gray-600 mb-6">
                     At Artisan Pottery, we believe in the power of handcrafted items to bring warmth and character
-                    to everyday living.
-                    Each piece is thoughtfully designed and carefully created by our skilled artisans.
+                    to everyday living. Each piece is thoughtfully designed and carefully created by our skilled artisans.
                 </p>
                 <p class="text-gray-600 mb-8">
                     Our commitment to sustainable practices means we source local materials and use traditional
-                    techniques
-                    that have been passed down through generations, resulting in pottery that's not only beautiful
-                    but also
-                    environmentally responsible.
+                    techniques that have been passed down through generations, resulting in pottery that's not only beautiful
+                    but also environmentally responsible.
                 </p>
-                <a href="about.html"
-                    class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                <a href="about.html" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
                     <span>Learn More About Our Process</span>
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -351,74 +243,33 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Testimonial 1 -->
+            
+            @foreach ($testimonials as $testimonial)
             <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale">
                 <div class="flex text-amber-400 mb-4">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= floor($testimonial['rating']))
+                            <i class="fas fa-star"></i>
+                        @elseif ($i - 0.5 <= $testimonial['rating'])
+                            <i class="fas fa-star-half-alt"></i>
+                        @else
+                            <i class="far fa-star"></i>
+                        @endif
+                    @endfor
                 </div>
                 <p class="text-gray-600 mb-6">
-                    "I received the ceramic vase set as a gift, and I was blown away by the quality and
-                    craftsmanship. The colors are even more vibrant in person!"
+                    "{{ $testimonial['comment'] }}"
                 </p>
                 <div class="flex items-center">
-                    <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Customer photo"
+                    <img src="{{ $testimonial['image'] }}" alt="Customer photo"
                         class="w-12 h-12 rounded-full mr-4" />
                     <div>
-                        <h4 class="font-bold text-gray-800">Emma Thompson</h4>
-                        <p class="text-gray-500 text-sm">New York, USA</p>
+                        <h4 class="font-bold text-gray-800">{{ $testimonial['name'] }}</h4>
+                        <p class="text-gray-500 text-sm">{{ $testimonial['location'] }}</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Testimonial 2 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale">
-                <div class="flex text-amber-400 mb-4">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <p class="text-gray-600 mb-6">
-                    "I've purchased several pieces from Artisan over the years, and each one continues to bring joy
-                    to my home. The attention to detail is remarkable."
-                </p>
-                <div class="flex items-center">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer photo"
-                        class="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                        <h4 class="font-bold text-gray-800">Michael Rodriguez</h4>
-                        <p class="text-gray-500 text-sm">Portland, USA</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale">
-                <div class="flex text-amber-400 mb-4">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <p class="text-gray-600 mb-6">
-                    "The tea set I ordered exceeded my expectations. Each piece feels unique and special, and the
-                    shipping was prompt and well-packaged."
-                </p>
-                <div class="flex items-center">
-                    <img src="https://randomuser.me/api/portraits/women/26.jpg" alt="Customer photo"
-                        class="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                        <h4 class="font-bold text-gray-800">Sarah Johnson</h4>
-                        <p class="text-gray-500 text-sm">London, UK</p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -464,7 +315,6 @@
     }
     
     function updateWishlistCounter(count) {
-        // Get the wishlist counter element in the navigation
         const navWishlistCounters = document.querySelectorAll('.fa-heart + span');
         
         navWishlistCounters.forEach(counter => {
