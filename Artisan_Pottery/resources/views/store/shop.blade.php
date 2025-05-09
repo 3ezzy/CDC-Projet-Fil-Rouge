@@ -10,7 +10,7 @@
                 <h1 class="font-playfair text-4xl md:text-5xl font-bold text-gray-800 mb-4">Our Collection</h1>
                 <nav class="flex justify-center">
                     <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-amber-600 transition-colors">Home</a></li>
+                        <li><a href="{{ route('home') }}" class="hover:text-amber-600 transition-colors">Home</a></li>
                         <li><span class="mx-2">/</span></li>
                         <li class="text-amber-600 font-medium">Shop</li>
                     </ol>
