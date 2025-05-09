@@ -125,10 +125,10 @@
                                     <i class="fas fa-shopping-cart mr-2"></i>
                                     Add to Cart
                                 </button>
-                                <button type="submit" name="buy_now" value="1"
+                                {{-- <button type="submit" name="buy_now" value="1"
                                     class="flex-1 bg-amber-100 text-amber-800 px-6 py-3 rounded-lg hover:bg-amber-200 transition-colors">
                                     Buy Now
-                                </button>
+                                </button> --}}
                             </div>
                         </form>
 
