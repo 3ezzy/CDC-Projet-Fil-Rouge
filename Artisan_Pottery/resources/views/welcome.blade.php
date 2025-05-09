@@ -20,7 +20,7 @@
                         class="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-full transition-colors shadow-lg hover:shadow-xl">
                         Shop Collection
                     </a>
-                    <a href="about.html"
+                    <a href="{{ route('about') }}"
                         class="px-8 py-3 bg-transparent border border-amber-600 text-amber-600 hover:bg-amber-50 rounded-full transition-colors">
                         Our Story
                     </a>
