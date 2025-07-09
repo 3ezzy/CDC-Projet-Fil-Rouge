@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Seller Dashboard') | Artisan Pottery</title>
+    <title>@yield('title', 'Pixel Pottery Dashboard') | Artisan Pottery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap');
@@ -22,12 +23,17 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* Enhanced hover effects for pixel art */
         .hover-scale {
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
         }
 
         .hover-scale:hover {
-            transform: scale(1.02);
+            transform: scale(1.02) translate(-1px, -1px);
         }
 
         .chart-container {
@@ -36,15 +42,28 @@
             width: 100%;
         }
 
-        /* Responsive Sidebar Styles */
+        /* Pixel Art Body Styling */
+        body {
+            background: linear-gradient(
+                135deg,
+                var(--pixel-neutral-light) 0%,
+                var(--pixel-neutral) 50%,
+                var(--pixel-neutral-dark) 100%
+            );
+            background-attachment: fixed;
+        }
+
+        /* Responsive Sidebar Styles with Pixel Art */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease-in-out;
+                border-right: 4px solid var(--pixel-secondary);
             }
 
             #sidebar.active {
                 transform: translateX(0);
+                box-shadow: 6px 0 20px rgba(0, 0, 0, 0.3);
             }
 
             .ml-64 {
@@ -52,10 +71,10 @@
             }
         }
 
-        /* Mobile Menu Button Styles */
+        /* Mobile Menu Button Styles with Pixel Art */
         .mobile-menu-button {
             display: none;
-            transition: opacity 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
         }
 
         @media (max-width: 768px) {
@@ -73,13 +92,32 @@
                 pointer-events: none;
             }
         }
+
+        /* Custom scrollbar with pixel art styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--pixel-neutral);
+            border: 2px solid var(--pixel-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--pixel-primary);
+            border: 2px solid var(--pixel-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--pixel-primary-dark);
+        }
     </style>
 </head>
 
-<body class="bg-[#f8f5f2] font-poppins">
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-button p-2 bg-white rounded-lg shadow-lg" id="openSidebar">
-        <i class="fas fa-bars text-gray-600"></i>
+<body class="pixel-bg-diagonal font-poppins">
+    <!-- Mobile Menu Button with Pixel Art Styling -->
+    <button class="mobile-menu-button pixel-button p-2" id="openSidebar">
+        <i class="fas fa-bars pixel-text-secondary"></i>
     </button>
 
     <div class="flex min-h-screen relative">
@@ -87,34 +125,32 @@
         @include('layouts.admin.navigation')
 
         <!-- Main Content -->
-        <main class="flex-1 bg-[#f8f5f2] p-4 transition-all duration-300 ml-0 md:ml-64">
+        <main class="flex-1 pixel-bg-dots p-4 transition-all duration-300 ml-0 md:ml-64">
             @yield('content')
         </main>
     </div>
 
-    <!-- Overlay for mobile -->
+    <!-- Overlay for mobile with pixel art styling -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
-    <!-- Before closing body tag -->
+    
+    <!-- Pixel Art Notifications -->
     @if(session('success') || session('error'))
     <div class="fixed bottom-4 right-4 z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg flex items-center">
-                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
+            <div class="pixel-notification pixel-panel p-4 text-white font-bold pixel-shake" style="background: var(--pixel-success);">
+                <i class="fas fa-check-circle mr-2"></i>
                 {{ session('success') }}
             </div>
         @endif
         @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg flex items-center">
-                <svg class="h-5 w-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                </svg>
+            <div class="pixel-notification pixel-panel p-4 text-white font-bold pixel-shake" style="background: var(--pixel-error);">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
                 {{ session('error') }}
             </div>
         @endif
     </div>
-@endif
+    @endif
+    
     @stack('scripts')
 
     
@@ -151,8 +187,19 @@
         });
     </script>
 
-    <!-- Chart.js Scripts -->
+    <!-- Chart.js Scripts with Pixel Art Colors -->
     <script>
+        // Pixel Art Color Palette
+        const pixelColors = {
+            primary: '#FE7743',
+            secondary: '#273F4F',
+            accent: '#447D9B',
+            neutral: '#D7D7D7',
+            success: '#4AE54A',
+            warning: '#FFD700',
+            error: '#FF4444'
+        };
+
         // Only initialize charts if the elements exist
         if (document.getElementById('salesChart')) {
             const salesChartCtx = document.getElementById('salesChart').getContext('2d');
@@ -163,13 +210,55 @@
                     datasets: [{
                         label: 'Sales',
                         data: [12000, 19000, 3000, 5000, 2000, 3000],
-                        borderColor: '#D97706',
-                        tension: 0.4,
+                        borderColor: pixelColors.primary,
+                        backgroundColor: pixelColors.primary + '33',
+                        borderWidth: 3,
+                        tension: 0,
+                        pointBackgroundColor: pixelColors.secondary,
+                        pointBorderColor: pixelColors.primary,
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: pixelColors.neutral,
+                                lineWidth: 2
+                            },
+                            ticks: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: pixelColors.neutral,
+                                lineWidth: 2
+                            },
+                            ticks: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -183,12 +272,56 @@
                     datasets: [{
                         label: 'Sales',
                         data: [120, 190, 30, 50, 20],
-                        backgroundColor: '#D97706',
+                        backgroundColor: [
+                            pixelColors.primary,
+                            pixelColors.accent,
+                            pixelColors.warning,
+                            pixelColors.success,
+                            pixelColors.error
+                        ],
+                        borderColor: pixelColors.secondary,
+                        borderWidth: 3,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: pixelColors.neutral,
+                                lineWidth: 2
+                            },
+                            ticks: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: pixelColors.neutral,
+                                lineWidth: 2
+                            },
+                            ticks: {
+                                color: pixelColors.secondary,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }

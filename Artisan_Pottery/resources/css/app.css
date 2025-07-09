@@ -9,3 +9,449 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ============================================
+   PIXEL ART THEME - COLOR PALETTE
+   ============================================ */
+:root {
+    --pixel-primary: #FE7743;    /* Coral/Orange */
+    --pixel-secondary: #273F4F;  /* Dark Blue-Gray */
+    --pixel-accent: #447D9B;     /* Blue */
+    --pixel-neutral: #D7D7D7;    /* Light Gray */
+    
+    /* Pixel art color variations */
+    --pixel-primary-light: #FF9966;
+    --pixel-primary-dark: #E5552A;
+    --pixel-secondary-light: #3A5A70;
+    --pixel-secondary-dark: #1A2B35;
+    --pixel-accent-light: #5A9BC4;
+    --pixel-accent-dark: #2E5F78;
+    --pixel-neutral-light: #EFEFEF;
+    --pixel-neutral-dark: #BFBFBF;
+    
+    /* Additional pixel art colors */
+    --pixel-success: #4AE54A;
+    --pixel-warning: #FFD700;
+    --pixel-error: #FF4444;
+    --pixel-white: #FFFFFF;
+    --pixel-black: #000000;
+}
+
+/* ============================================
+   PIXEL ART BASE STYLES
+   ============================================ */
+.pixel-art {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.pixel-border {
+    border: 4px solid var(--pixel-secondary);
+    border-image: 
+        repeating-linear-gradient(
+            45deg,
+            var(--pixel-secondary) 0px,
+            var(--pixel-secondary) 4px,
+            transparent 4px,
+            transparent 8px
+        ) 4;
+}
+
+.pixel-border-primary {
+    border: 4px solid var(--pixel-primary);
+    box-shadow: 
+        inset 0 0 0 2px var(--pixel-primary-light),
+        inset 0 0 0 4px var(--pixel-primary),
+        4px 4px 0 var(--pixel-primary-dark);
+}
+
+.pixel-border-accent {
+    border: 4px solid var(--pixel-accent);
+    box-shadow: 
+        inset 0 0 0 2px var(--pixel-accent-light),
+        inset 0 0 0 4px var(--pixel-accent),
+        4px 4px 0 var(--pixel-accent-dark);
+}
+
+/* ============================================
+   PIXEL ART CONTAINERS & PANELS
+   ============================================ */
+.pixel-panel {
+    background: var(--pixel-neutral);
+    border: 4px solid var(--pixel-secondary);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-white),
+        inset -2px -2px 0 var(--pixel-neutral-dark),
+        4px 4px 0 var(--pixel-secondary-dark);
+    position: relative;
+}
+
+.pixel-panel-primary {
+    background: var(--pixel-primary);
+    border: 4px solid var(--pixel-primary-dark);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-primary-light),
+        inset -2px -2px 0 var(--pixel-primary-dark),
+        4px 4px 0 var(--pixel-secondary);
+}
+
+.pixel-panel-accent {
+    background: var(--pixel-accent);
+    border: 4px solid var(--pixel-accent-dark);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-accent-light),
+        inset -2px -2px 0 var(--pixel-accent-dark),
+        4px 4px 0 var(--pixel-secondary);
+}
+
+/* ============================================
+   PIXEL ART BUTTONS & INTERACTIONS
+   ============================================ */
+.pixel-button {
+    background: var(--pixel-primary);
+    border: 4px solid var(--pixel-primary-dark);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-primary-light),
+        inset -2px -2px 0 var(--pixel-primary-dark),
+        2px 2px 0 var(--pixel-secondary);
+    transition: all 0.1s ease;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pixel-button:hover {
+    background: var(--pixel-primary-light);
+    transform: translate(-1px, -1px);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-white),
+        inset -2px -2px 0 var(--pixel-primary),
+        3px 3px 0 var(--pixel-secondary);
+}
+
+.pixel-button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 
+        inset 2px 2px 0 var(--pixel-primary-dark),
+        inset -2px -2px 0 var(--pixel-primary-light),
+        1px 1px 0 var(--pixel-secondary);
+}
+
+/* ============================================
+   PIXEL ART DECORATIVE ELEMENTS
+   ============================================ */
+.pixel-star {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: var(--pixel-warning);
+    border: 2px solid var(--pixel-secondary);
+}
+
+.pixel-star::before,
+.pixel-star::after {
+    content: '';
+    position: absolute;
+    background: var(--pixel-warning);
+    border: 2px solid var(--pixel-secondary);
+}
+
+.pixel-star::before {
+    width: 8px;
+    height: 20px;
+    top: -4px;
+    left: 2px;
+}
+
+.pixel-star::after {
+    width: 20px;
+    height: 8px;
+    top: 2px;
+    left: -4px;
+}
+
+.pixel-heart {
+    position: relative;
+    width: 20px;
+    height: 16px;
+    background: var(--pixel-error);
+    border: 2px solid var(--pixel-secondary);
+    transform: rotate(45deg);
+}
+
+.pixel-heart::before,
+.pixel-heart::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 16px;
+    background: var(--pixel-error);
+    border: 2px solid var(--pixel-secondary);
+    border-radius: 50% 50% 0 0;
+}
+
+.pixel-heart::before {
+    left: -12px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.pixel-heart::after {
+    left: 0px;
+    bottom: 0px;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+/* ============================================
+   PIXEL ART ANIMATIONS
+   ============================================ */
+@keyframes pixelPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes pixelGlow {
+    0%, 100% { box-shadow: 0 0 0 var(--pixel-primary); }
+    50% { box-shadow: 0 0 20px var(--pixel-primary); }
+}
+
+@keyframes pixelFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes pixelShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+.pixel-pulse {
+    animation: pixelPulse 2s infinite;
+}
+
+.pixel-glow {
+    animation: pixelGlow 3s infinite;
+}
+
+.pixel-float {
+    animation: pixelFloat 3s infinite;
+}
+
+.pixel-shake {
+    animation: pixelShake 0.5s;
+}
+
+/* ============================================
+   PIXEL ART BACKGROUNDS & PATTERNS
+   ============================================ */
+.pixel-bg-dots {
+    background-image: 
+        radial-gradient(var(--pixel-secondary) 1px, transparent 1px);
+    background-size: 8px 8px;
+}
+
+.pixel-bg-grid {
+    background-image: 
+        linear-gradient(var(--pixel-neutral-dark) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pixel-neutral-dark) 1px, transparent 1px);
+    background-size: 8px 8px;
+}
+
+.pixel-bg-diagonal {
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            var(--pixel-neutral),
+            var(--pixel-neutral) 4px,
+            var(--pixel-neutral-light) 4px,
+            var(--pixel-neutral-light) 8px
+        );
+}
+
+/* ============================================
+   PIXEL ART PROGRESS BARS
+   ============================================ */
+.pixel-progress {
+    width: 100%;
+    height: 20px;
+    background: var(--pixel-neutral-dark);
+    border: 4px solid var(--pixel-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.pixel-progress-bar {
+    height: 100%;
+    background: 
+        linear-gradient(
+            90deg,
+            var(--pixel-success) 0%,
+            var(--pixel-warning) 50%,
+            var(--pixel-error) 100%
+        );
+    border-right: 2px solid var(--pixel-secondary);
+    position: relative;
+    transition: width 0.3s ease;
+}
+
+.pixel-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(255, 255, 255, 0.3) 2px,
+            rgba(255, 255, 255, 0.3) 4px
+        );
+}
+
+/* ============================================
+   PIXEL ART ICONS
+   ============================================ */
+.pixel-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: var(--pixel-secondary);
+    position: relative;
+}
+
+.pixel-icon-calendar {
+    background: var(--pixel-neutral);
+    border: 3px solid var(--pixel-secondary);
+}
+
+.pixel-icon-calendar::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 3px;
+    right: 3px;
+    height: 6px;
+    background: var(--pixel-error);
+    border-left: 3px solid var(--pixel-secondary);
+    border-right: 3px solid var(--pixel-secondary);
+}
+
+.pixel-icon-calendar::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    background-image: 
+        linear-gradient(var(--pixel-secondary) 2px, transparent 2px),
+        linear-gradient(90deg, var(--pixel-secondary) 2px, transparent 2px);
+    background-size: 6px 6px;
+}
+
+/* ============================================
+   PIXEL ART HOVER EFFECTS
+   ============================================ */
+.pixel-hover:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        4px 4px 0 var(--pixel-secondary),
+        6px 6px 0 var(--pixel-secondary-dark);
+    transition: all 0.1s ease;
+}
+
+.pixel-scale:hover {
+    transform: scale(1.02);
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* ============================================
+   PIXEL ART UTILITIES
+   ============================================ */
+.pixel-text-primary {
+    color: var(--pixel-primary);
+    text-shadow: 1px 1px 0 var(--pixel-secondary);
+}
+
+.pixel-text-secondary {
+    color: var(--pixel-secondary);
+    text-shadow: 1px 1px 0 var(--pixel-neutral);
+}
+
+.pixel-text-accent {
+    color: var(--pixel-accent);
+    text-shadow: 1px 1px 0 var(--pixel-white);
+}
+
+.pixel-shadow {
+    box-shadow: 4px 4px 0 var(--pixel-secondary);
+}
+
+.pixel-shadow-large {
+    box-shadow: 
+        6px 6px 0 var(--pixel-secondary),
+        8px 8px 0 var(--pixel-secondary-dark);
+}
+
+/* ============================================
+   RESPONSIVE PIXEL ART
+   ============================================ */
+@media (max-width: 768px) {
+    .pixel-panel,
+    .pixel-panel-primary,
+    .pixel-panel-accent {
+        border-width: 3px;
+        box-shadow: 
+            inset 1px 1px 0 var(--pixel-white),
+            inset -1px -1px 0 var(--pixel-neutral-dark),
+            3px 3px 0 var(--pixel-secondary-dark);
+    }
+    
+    .pixel-border,
+    .pixel-border-primary,
+    .pixel-border-accent {
+        border-width: 3px;
+    }
+    
+    .pixel-button {
+        border-width: 3px;
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   PIXEL ART NOTIFICATION STYLES
+   ============================================ */
+.pixel-notification {
+    background: var(--pixel-success);
+    border: 4px solid var(--pixel-secondary);
+    box-shadow: 
+        inset 2px 2px 0 rgba(255, 255, 255, 0.5),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.2),
+        4px 4px 0 var(--pixel-secondary-dark);
+    position: relative;
+}
+
+.pixel-notification::before {
+    content: '!';
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    color: var(--pixel-white);
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 1px 1px 0 var(--pixel-secondary);
+}
